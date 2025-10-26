@@ -1,0 +1,1358 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Grocery Admin Panel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* --- প্রথম HTML ফাইলের ডিজাইন শুরু --- */
+    :root {
+      --primary-color: #4CAF50; /* সবুজ */
+      --secondary-color: #2196F3; /* নীল */
+      --background-color: #f4f4f9;
+      --card-background: #ffffff;
+      --text-color: #333;
+      --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background-color: var(--background-color);
+      color: var(--text-color);
+      min-height: 100vh;
+      padding-bottom: 70px; /* বটম মেনুর জন্য জায়গা */
+    }
+    /* Admin Panel Header */
+    header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 15px 20px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      /* second file header style fix */
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+    /* Main Content Area */
+    .container { /* 'main' এর পরিবর্তে 'container' */
+      padding: 20px;
+    }
+    /* Section Hiding (second file class) */
+    .section { 
+      display: none;
+      padding-bottom: 30px;
+    }
+    .section.active {
+      display: block;
+    }
+    /* --- Bottom Menu (Fixed) --- */
+    .bottom-menu {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 60px;
+      background-color: var(--card-background);
+      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 1000;
+    }
+    /* second file bm-item to menu-item */
+    .bm-item { 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      cursor: pointer;
+      color: #777;
+      transition: color 0.3s;
+      text-decoration: none;
+      font-size: 0.75rem;
+      flex: 1;
+    }
+    .bm-item:hover, .bm-item.active {
+      color: var(--primary-color);
+    }
+    .bm-item i {
+      font-size: 1.3rem;
+      margin-bottom: 3px;
+    }
+    /* --- General Card/Box Styles --- */
+    .card {
+      background-color: var(--card-background);
+      border-radius: 8px;
+      padding: 15px; /* কিছুটা ছোট প্যাডিং দ্বিতীয় ফাইলের জন্য */
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .section-title { /* দ্বিতীয় ফাইলে ব্যবহার না হলেও, ডিজাইনের জন্য রাখা হলো */
+      font-size: 1.25rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 5px;
+    }
+    
+    /* Second file specific styles adapted to theme */
+    .row {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap; /* responsive fix */
+    }
+    .col {
+      flex: 1;
+      min-width: 300px; /* responsive fix */
+    }
+    @media(max-width:700px){.col{min-width: 100%;}.row{flex-direction:column;}}
+    .small {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    /* Dashboard tiles (stat) */
+    .tiles{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    /* ** নতুন স্টাইল: অর্ডার পেজ স্ট্যাটাস টাইল ** */
+    #order-status-tiles .stat {
+      background-color: var(--card-background);
+      border: 1px solid #ddd;
+      padding: 12px 10px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    #order-status-tiles .stat:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    #order-status-tiles .stat.active {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    .stat {
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+      border-left: 5px solid var(--primary-color);
+      box-shadow: none;
+    }
+    .stat h3 {
+      font-size: 2rem;
+      margin-bottom: 5px;
+      margin-top: 0;
+      color: var(--text-color); /* রঙ পরিবর্তন, মূল ডিজাইনের সাথে মিলিয়ে */
+    }
+    .stat p {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin: 0;
+      color: var(--text-color);
+    }
+    /* Aggregated List Card */
+    .list { margin-top: 20px; }
+    .list > div > .card { padding: 10px; box-shadow: none; border: 1px solid #eee; }
+
+    /* Order Card (order-card) */
+    .order-card{
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      background-color: var(--card-background);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .order-meta{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      border-bottom: 1px dotted #eee;
+      padding-bottom: 5px;
+    }
+    .items{margin-top:8px;font-size:0.9rem;}
+    .item-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+      padding:5px 0;
+      border-bottom: 1px dotted #f0f0f0;
+    }
+    .item-line:last-child { border-bottom: none; }
+    .icon-btn{
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      background: #f9f9f9;
+      font-size: 0.8rem;
+    }
+    /* Buttons */
+    .btn {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background-color 0.3s;
+      background-color: var(--primary-color);
+      color: white;
+      font-size: 0.9rem;
+    }
+    .btn.ghost {
+      background-color: transparent;
+      color: #777;
+      border: 1px solid #ccc;
+    }
+    .btn:hover { opacity: 0.9; }
+
+    /* Forms */
+    input, select, textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      background-color: white;
+      color: var(--text-color);
+      width: 100%;
+      margin-top: 5px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    label:first-child { margin-top: 0; }
+    
+    /* Tables */
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td{
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+      vertical-align: middle;
+      font-size: 0.9rem;
+    }
+    th {
+      background-color: var(--primary-color);
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    .data-table-container { overflow-x: auto; } /* for tables */
+    .badge{ /* second file badge to first file look */
+      padding: 5px 10px;
+      border-radius: 5px;
+      color: white;
+      font-size: 0.8rem;
+      background-color: var(--secondary-color);
+    }
+    /* Image in Table */
+    .table-image-sm {
+      width: 48px;
+      height: 36px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    /* Setting image */
+    #profile-image, #settings-image {
+      border: 3px solid var(--primary-color);
+    }
+
+    /* second file media query for row */
+    @media(max-width:700px){.row{flex-direction:column;}}
+
+    /* --- নতুন লগইন মোডাল স্টাইল --- */
+    .modal {
+      display: none; 
+      position: fixed;
+      z-index: 10000; /* মেনুর উপরে থাকবে */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.7);
+      padding-top: 100px;
+    }
+    .modal-content {
+      background-color: var(--card-background);
+      margin: auto;
+      padding: 30px 20px;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    .modal-content h3 {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    .modal-content input {
+      margin-bottom: 10px;
+    }
+    #login-message {
+      color: #F44336;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    /* প্রোফাইল কার্ড স্টাইল (সেটিংস) */
+    .profile-info-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: var(--card-background);
+      margin-bottom: 20px;
+    }
+    .profile-info-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--primary-color);
+    }
+    .profile-info-card h3 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    .profile-info-card p {
+      color: #777;
+    }
+    .profile-action-group {
+      border-top: 1px solid #eee;
+      padding-top: 15px;
+      margin-top: 15px;
+    }
+    .profile-action-group h4 {
+      color: var(--secondary-color);
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+    .btn-logout-full {
+      background-color: #F44336;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 20px;
+      width: 100%;
+      font-weight: bold;
+    }
+
+    /* --- প্রথম HTML ফাইলের ডিজাইন শেষ --- */
+  </style>
+</head>
+<body>
+  
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <h3 style="display:flex; align-items:center; justify-content:center; gap: 10px;"><i class="fas fa-lock"></i> অ্যাডমিন লগইন</h3>
+      <form id="auth-login-form">
+        <label for="auth-username">ইউজারনেম বা ইমেইল</label>
+        <input type="text" id="auth-username" required>
+        
+        <label for="auth-password">পাসওয়ার্ড</label>
+        <input type="password" id="auth-password" required>
+
+        <div style="display: flex; align-items: center; justify-content: flex-start; margin-top: 10px;">
+            <input type="checkbox" id="remember-me" style="width: auto; margin-right: 8px; margin-top: 0;" checked>
+            <label for="remember-me" style="margin-top: 0; font-weight: normal; font-size: 0.9rem;">আমাকে মনে রাখুন</label>
+        </div>
+        
+        <div id="login-message"></div>
+        
+        <button type="submit" class="btn" style="width: 100%; margin-top: 20px;">লগইন করুন</button>
+      </form>
+    </div>
+  </div>
+
+  <header id="main-header" style="display:none;">
+    <h1>🛒 Grocery Admin Panel</h1>
+    <div style="margin-left:auto;color:white" id="profile-display">Not logged</div>
+  </header>
+
+  <div class="container" id="main-content" style="display:none;">
+    <section id="home" class="section active">
+      <div class="row">
+        <div class="col card">
+          <h2 style="margin:0 0 15px 0; font-size: 1.25rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px;">Dashboard - অর্ডার সারাংশ</h2>
+          <div class="tiles" id="status-tiles">
+            <div class="stat" style="background-color: #fff3e0; color: #ff9800; border-color: #ff9800;">
+              <h3 id="cnt-pending">0</h3>
+              <p style="color: #ff9800;">Pending</p>
+            </div>
+            <div class="stat" style="background-color: #e3f2fd; color: #2196F3; border-color: #2196F3;">
+              <h3 id="cnt-accept">0</h3>
+              <p style="color: #2196F3;">Accept</p>
+            </div>
+            <div class="stat" style="background-color: #e8f5e9; color: #4CAF50; border-color: #4CAF50;">
+              <h3 id="cnt-complete">0</h3>
+              <p style="color: #4CAF50;">Complete</p>
+            </div>
+            <div class="stat" style="background-color: #ffebee; color: #F44336; border-color: #F44336;">
+              <h3 id="cnt-cancel">0</h3>
+              <p style="color: #F44336;">Cancel</p>
+            </div>
+          </div>
+        </div>
+        <div class="col card">
+          <h3 style="margin-top:0; color: var(--secondary-color);">অ্যাডমিন প্রোফাইল</h3>
+          <p class="small">Admin profile & quick actions</p>
+          <div style="margin-top:15px;display:flex;gap:15px;align-items:center">
+            <img id="profile-image" src="https://via.placeholder.com/64/4CAF50/FFFFFF?text=Ad" style="width:64px;height:64px;border-radius:50%;object-fit:cover"/>
+            <div>
+              <div id="profile-name" style="font-weight: bold; font-size: 1.1rem;">Guest</div>
+              <div class="small">Logged in as: <span id="last-login">-</span></div> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card list">
+        <h3 style="margin:0 0 10px 0; color: var(--primary-color);">মোট পণ্যের হিসেব</h3>
+        <p class="small">আপনার স্টক ম্যানেজমেন্টের জন্য মোট পণ্যের হিসাব</p>
+        <div class="row" style="margin-top: 15px; gap: 15px;">
+            <div class="col card" style="border-left: 5px solid #ff9800; background-color: #fff3e0; margin-bottom: 0; min-width: 45%;">
+                <h4 style="margin:0 0 8px 0; color: #ff9800;">পেন্ডিং অর্ডার এর পণ্য <i class="fas fa-hourglass-half"></i></h4>
+                <div id="agg-pending" class="product-total-list">Loading...</div>
+            </div>
+            <div class="col card" style="border-left: 5px solid var(--primary-color); background-color: #e8f5e9; margin-bottom: 0; min-width: 45%;">
+                <h4 style="margin:0 0 8px 0; color: var(--primary-color);">গ্রহন করা অর্ডার এর পণ্য <i class="fas fa-check-circle"></i></h4>
+                <div id="agg-accept" class="product-total-list">Loading...</div>
+            </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="orders" class="section">
+      <div class="card">
+        <h2 style="margin:0 0 15px 0; font-size: 1.25rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px;">অর্ডার ম্যানেজমেন্ট</h2>
+
+        <div class="tiles" id="order-status-tiles" style="margin-bottom: 20px;">
+            <div class="stat" data-status="Pending" style="background-color: #fff3e0; color: #ff9800; border-color: #ff9800;"><h3 id="ord-cnt-pending">0</h3><p style="color: #ff9800;">Pending</p></div>
+            <div class="stat" data-status="Accept" style="background-color: #e8f5e9; color: #4CAF50; border-color: #4CAF50;"><h3 id="ord-cnt-accept">0</h3><p style="color: #4CAF50;">Accept</p></div>
+            <div class="stat" data-status="Delivery" style="background-color: #e3f2fd; color: #2196F3; border-color: #2196F3;"><h3 id="ord-cnt-delivery">0</h3><p style="color: #2196F3;">Delivery</p></div>
+            <div class="stat" data-status="Complete" style="background-color: #e3f2fd; color: #2196F3; border-color: #2196F3;"><h3 id="ord-cnt-complete">0</h3><p style="color: #2196F3;">Complete</p></div>
+            <div class="stat" data-status="Cancel" style="background-color: #ffebee; color: #F44336; border-color: #F44336;"><h3 id="ord-cnt-cancel">0</h3><p style="color: #F44336;">Cancel</p></div>
+        </div>
+
+        <div style="margin-bottom: 15px;">
+            <input type="text" id="order-search-input" placeholder="অর্ডার ID দিয়ে সার্চ করুন..." />
+        </div>
+        
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="small">স্ট্যাটাস (ম্যানুয়াল ফিল্টার):</label>
+          <select id="filter-status" style="flex-grow: 1; display: none;"> 
+            <option value="Pending">পেন্ডিং অর্ডার</option>
+            <option value="Accept">গ্রহন করা অর্ডার</option>
+            <option value="Complete">সম্পন্ন অর্ডার</option>
+            <option value="Cancel">বাতিল অর্ডার</option>
+            <option value="Delivery">ডেলিভারি চলছে</option>
+          </select>
+          <span id="current-filter-display" style="font-weight: bold; color: var(--primary-color);">Pending</span>
+        </div>
+        <div id="orders-list" class="list"></div>
+      </div>
+    </section>
+
+    <section id="categories" class="section">
+      <div class="card">
+        <h2 style="margin:0 0 8px 0; font-size: 1.25rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px;">সকল ক্যাটাগরি 
+          <button class="btn btn-add" id="add-cat-btn" style="float:right; padding: 8px 15px;">➕ ক্যাটাগরি যোগ করুন</button>
+        </h2>
+        <div style="margin-top:8px" class="small">মোট ক্যাটাগরি: <span id="cat-count" style="font-weight: bold;">0</span></div>
+        <div id="cat-table" class="data-table-container" style="margin-top:12px"></div>
+      </div>
+
+      <div id="cat-form" class="card" style="margin-top:12px;display:none">
+        <h3 id="cat-form-title" style="color: var(--secondary-color);">নতুন ক্যাটাগরি যোগ করুন</h3>
+        <div style="margin-top:8px">
+          <label>ক্যাটাগরির নাম</label>
+          <input id="cat-name" />
+          <label style="margin-top:8px">Image URL</label>
+          <input id="cat-image" placeholder="http://... or leave blank" />
+          <div style="margin-top:15px;display:flex;gap:8px; justify-content: flex-end;">
+            <button class="btn btn-accept" id="cat-save">সংরক্ষণ করুন</button>
+            <button class="btn btn-cancel ghost" id="cat-cancel">বাতিল করুন</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <div class="card">
+        <h2 style="margin:0 0 8px 0; font-size: 1.25rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px;">সকল প্রোডাক্ট 
+          <button class="btn btn-add" id="add-prod-btn" style="float:right; padding: 8px 15px;">➕ প্রোডাক্ট যোগ করুন</button>
+        </h2>
+        <div style="margin-top:8px" class="small">মোট প্রোডাক্ট: <span id="prod-count" style="font-weight: bold;">0</span></div>
+        <div style="margin-top:8px">
+          <input id="prod-search" placeholder="নাম, ক্যাটাগরি বা আইডি দিয়ে সার্চ করুন..." />
+        </div>
+        <div id="prod-table" class="data-table-container" style="margin-top:12px"></div>
+      </div>
+
+      <div id="prod-form" class="card" style="margin-top:12px;display:none">
+        <h3 id="prod-form-title" style="color: var(--secondary-color);">নতুন প্রোডাক্ট যোগ করুন</h3>
+        <div style="margin-top:8px;display:grid;grid-template-columns:1fr;gap:8px">
+          <label>ক্যাটাগরি নির্বাচন করুন</label>
+          <select id="prod-cat"></select>
+          <label>প্রোডাক্ট এর নাম</label>
+          <input id="prod-name" />
+          <label>Image URL</label>
+          <input id="prod-image" placeholder="http://..." />
+          <label>প্রোডাক্ট এর প্রতি কেজির দাম (টাকা)</label>
+          <input id="prod-price" type="number" />
+          <label>ভেরিয়েন্ট (কমা দিয়ে লিখুন)</label>
+          <input id="prod-variant" placeholder="e.g. 1kg,500g" />
+          <div style="display:flex;gap:8px; margin-top: 15px; justify-content: flex-end;">
+            <button class="btn btn-accept" id="prod-save">সংরক্ষণ করুন</button>
+            <button class="btn btn-cancel ghost" id="prod-cancel">বাতিল করুন</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="settings" class="section">
+      <div class="card">
+        <h2 style="margin:0 0 15px 0; font-size: 1.25rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 5px;">অ্যাডমিন প্রোফাইল ম্যানেজমেন্ট</h2>
+        
+        <div class="profile-info-card">
+            <img id="settings-image" src="https://via.placeholder.com/80/4CAF50/FFFFFF?text=Ad" alt="Admin Image">
+            <div class="profile-info">
+                <h3 id="settings-name">Admin Name</h3>
+                <p id="settings-username-display">Username</p>
+                <button class="btn" onclick="document.getElementById('edit-profile-form-div').style.display = 'block'; document.getElementById('settings-name-input').value = document.getElementById('settings-name').innerText;">প্রোফাইল এডিট করুন</button>
+            </div>
+        </div>
+
+        <div id="edit-profile-form-div" class="card" style="margin-top:15px; display: none;">
+            <h4 style="color: var(--secondary-color);">নাম ও ছবি পরিবর্তন</h4>
+            <form id="edit-profile-form">
+                <label for="settings-name-input">নাম</label>
+                <input type="text" id="settings-name-input" required>
+                
+                <label for="settings-image-input">ছবির লিঙ্ক</label>
+                <input type="url" id="settings-image-input" placeholder="http://example.com/image.png">
+                
+                <div style="display:flex;gap:8px; margin-top: 15px; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-accept">আপডেট করুন</button>
+                    <button type="button" class="btn btn-cancel ghost" onclick="document.getElementById('edit-profile-form-div').style.display = 'none';">বাতিল</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="profile-action-group card">
+            <h4>পাসওয়ার্ড পরিবর্তন</h4>
+            <form id="change-password-form">
+                <label for="current-password">বর্তমান পাসওয়ার্ড</label>
+                <input type="password" id="current-password" required>
+                
+                <label for="new-password">নতুন পাসওয়ার্ড</label>
+                <input type="password" id="new-password" required>
+                
+                <div id="password-message" class="small" style="text-align: left;"></div>
+                
+                <div style="display:flex;gap:8px; margin-top: 15px; justify-content: flex-end;">
+                    <button type="submit" class="btn btn-delivery" style="background-color: var(--secondary-color);">পরিবর্তন করুন</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="profile-action-group">
+            <button class="btn-logout-full" onclick="logoutAdmin()">❌ লগআউট করুন</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <nav class="bottom-menu" id="main-menu" style="display:none;">
+    <div class="bm-item active" data-id="home">
+      <i class="fas fa-home"></i>
+      <span>হোম</span>
+    </div>
+    <div class="bm-item" data-id="orders">
+      <i class="fas fa-shopping-basket"></i>
+      <span>অর্ডার</span>
+    </div>
+    <div class="bm-item" data-id="categories">
+      <i class="fas fa-tags"></i>
+      <span>ক্যাটাগরি</span>
+    </div>
+    <div class="bm-item" data-id="products">
+      <i class="fas fa-box-open"></i>
+      <span>প্রডাক্ট</span>
+    </div>
+    <div class="bm-item" data-id="settings">
+      <i class="fas fa-cog"></i>
+      <span>সেটিংস</span>
+    </div>
+  </nav>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+    import { getDatabase, ref, onValue, get, child, set, push, update, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyADtV06zQSN1mgfHPGyMd9XMrcnaBDbIl8",
+      authDomain: "bazar-coltrolpanel.firebaseapp.com",
+      projectId: "bazar-coltrolpanel",
+      storageBucket: "bazar-coltrolpanel.firebasestorage.app",
+      messagingSenderId: "434325187483",
+      appId: "1:434325187483:web:2bbdf219d027545798cf3e",
+      measurementId: "G-JRFJTKQ2XK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase(app);
+    
+    // ** গ্লোবাল ভেরিয়েবল: বর্তমান লগইন করা ইউজার **
+    let currentAdminUser = null; 
+    let allOrdersData = {}; // সমস্ত অর্ডার ডেটা ক্যাশ করে রাখার জন্য
+
+    // ** পেজ লোড হবার সাথে সাথে যা ঘটবে **
+    document.addEventListener('DOMContentLoaded', () => {
+        // নতুন: "Remember Me" থেকে ডেটা লোড করার চেষ্টা
+        const savedLogin = localStorage.getItem('adminAuth');
+        if (savedLogin) {
+            const authData = JSON.parse(savedLogin);
+            attemptAutoLogin(authData.username, authData.password);
+        } else {
+            showLoginScreen();
+        }
+    });
+
+    async function attemptAutoLogin(username, password) {
+        const msgNode = document.getElementById('login-message');
+        msgNode.innerText = 'অটো-লগইন করা হচ্ছে...';
+        
+        try {
+            const userRef = ref(db, 'user/' + username);
+            const snap = await get(userRef);
+
+            if (!snap.exists()) {
+                msgNode.innerText = '❌ অটো-লগইন ব্যর্থ: ইউজারনেম খুঁজে পাওয়া যায়নি।';
+                localStorage.removeItem('adminAuth');
+                showLoginScreen();
+                return;
+            }
+
+            const userData = snap.val();
+            const storedPassword = userData.password ? String(userData.password).trim() : '';
+
+            if (storedPassword === password) {
+                // লগইন সফল
+                currentAdminUser = {
+                    username: username,
+                    name: userData.name || username,
+                    image: userData.image || 'https://via.placeholder.com/64/4CAF50/FFFFFF?text=Ad'
+                };
+                
+                document.getElementById('profile-name').innerText = currentAdminUser.name;
+                document.getElementById('profile-image').src = currentAdminUser.image;
+                document.getElementById('profile-display').innerText = currentAdminUser.name;
+                // CHANGED: Last login change to username
+                document.getElementById('last-login').innerText = currentAdminUser.username; 
+                
+                msgNode.innerText = '✅ অটো-লগইন সফল! প্রবেশ করা হচ্ছে...';
+                setTimeout(showMainApp, 500);
+            } else {
+                msgNode.innerText = '❌ অটো-লগইন ব্যর্থ: পাসওয়ার্ড মিলছে না।';
+                localStorage.removeItem('adminAuth');
+                showLoginScreen();
+            }
+
+        } catch (error) {
+            console.error("Auto Login error:", error);
+            msgNode.innerText = '❌ অটো-লগইন ব্যর্থ: সংযোগ ত্রুটি।';
+            localStorage.removeItem('adminAuth');
+            showLoginScreen();
+        }
+    }
+
+
+    function showLoginScreen() {
+        document.getElementById('login-modal').style.display = 'block';
+        document.getElementById('main-header').style.display = 'none';
+        document.getElementById('main-content').style.display = 'none';
+        document.getElementById('main-menu').style.display = 'none';
+        document.getElementById('login-message').innerText = '';
+    }
+
+    function showMainApp() {
+        document.getElementById('login-modal').style.display = 'none';
+        document.getElementById('main-header').style.display = 'flex';
+        document.getElementById('main-content').style.display = 'block';
+        document.getElementById('main-menu').style.display = 'flex';
+        
+        // হোম সেকশন অ্যাক্টিভ করুন
+        document.querySelector('.bm-item[data-id="home"]').click(); 
+        
+        // ড্যাশবোর্ড ডেটা লোড করুন
+        loadOrdersAndStats();
+        // সেটিংস প্রোফাইল আপডেট করুন
+        updateProfileDisplay(currentAdminUser);
+    }
+
+    // --- লগইন লজিক (পাসওয়ার্ড ট্রিম করে ঠিক করা হয়েছে) ---
+    document.getElementById('auth-login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const username = document.getElementById('auth-username').value.trim();
+        const password = document.getElementById('auth-password').value;
+        const rememberMe = document.getElementById('remember-me').checked; // নতুন
+        const msgNode = document.getElementById('login-message');
+        msgNode.innerText = 'লগইন করা হচ্ছে...';
+        
+        try {
+            const userRef = ref(db, 'user/' + username);
+            const snap = await get(userRef);
+
+            if (!snap.exists()) {
+                msgNode.innerText = '❌ ইউজারনেম খুঁজে পাওয়া যায়নি।';
+                return;
+            }
+
+            const userData = snap.val();
+            
+            const storedPassword = userData.password ? String(userData.password).trim() : '';
+
+            if (storedPassword === password) {
+                // লগইন সফল
+                currentAdminUser = {
+                    username: username,
+                    name: userData.name || username,
+                    image: userData.image || 'https://via.placeholder.com/64/4CAF50/FFFFFF?text=Ad'
+                };
+
+                // ** নতুন: "Remember Me" লজিক **
+                if (rememberMe) {
+                    localStorage.setItem('adminAuth', JSON.stringify({ username, password }));
+                } else {
+                    localStorage.removeItem('adminAuth');
+                }
+                
+                // প্রোফাইল তথ্য আপডেট
+                document.getElementById('profile-name').innerText = currentAdminUser.name;
+                document.getElementById('profile-image').src = currentAdminUser.image;
+                document.getElementById('profile-display').innerText = currentAdminUser.name;
+                // CHANGED: Last login change to username
+                document.getElementById('last-login').innerText = currentAdminUser.username; 
+                
+                msgNode.innerText = '✅ লগইন সফল! প্রবেশ করা হচ্ছে...';
+                
+                setTimeout(showMainApp, 500);
+
+            } else {
+                msgNode.innerText = '❌ ভুল পাসওয়ার্ড।';
+            }
+
+        } catch (error) {
+            console.error("Login error:", error);
+            msgNode.innerText = '❌ লগইন ব্যর্থ: সংযোগ বা ডেটা ত্রুটি।';
+        }
+    });
+
+    // --- লগআউট ফাংশন (গ্লোবাল) ---
+    window.logoutAdmin = function() {
+        currentAdminUser = null; 
+        localStorage.removeItem('adminAuth'); // রিমEMBER ME ডেটা মুছে ফেলা
+        document.getElementById('auth-username').value = '';
+        document.getElementById('auth-password').value = '';
+        alert('সফলভাবে লগআউট করা হয়েছে।');
+        showLoginScreen();
+    }
+
+    // --- প্রোফাইল আপডেট ফাংশন (আংশিক পরিবর্তিত) ---
+    function updateProfileDisplay(user) {
+        if (!user) return;
+        document.getElementById('profile-name').innerText = user.name;
+        document.getElementById('profile-image').src = user.image;
+        document.getElementById('profile-display').innerText = user.name;
+        // CHANGED: Last login update
+        document.getElementById('last-login').innerText = user.username; 
+        
+        document.getElementById('settings-name').innerText = user.name;
+        document.getElementById('settings-image').src = user.image;
+        document.getElementById('settings-username-display').innerText = user.username;
+        document.getElementById('settings-name-input').value = user.name;
+        document.getElementById('settings-image-input').value = user.image === 'https://via.placeholder.com/64/4CAF50/FFFFFF?text=Ad' ? '' : user.image;
+        document.getElementById('password-message').innerText = ''; 
+    }
+
+    // --- প্রোফাইল এডিট লজিক (অপরিবর্তিত) ---
+    document.getElementById('edit-profile-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const newName = document.getElementById('settings-name-input').value.trim();
+        const newImage = document.getElementById('settings-image-input').value.trim();
+        
+        if (!currentAdminUser) return;
+        
+        try {
+            await update(ref(db, 'user/' + currentAdminUser.username), {
+                name: newName,
+                image: newImage || null 
+            });
+            
+            currentAdminUser.name = newName;
+            currentAdminUser.image = newImage || 'https://via.placeholder.com/64/4CAF50/FFFFFF?text=Ad';
+            
+            updateProfileDisplay(currentAdminUser);
+            document.getElementById('edit-profile-form-div').style.display = 'none';
+            alert('✅ প্রোফাইল সফলভাবে আপডেট করা হয়েছে।');
+
+            // নতুন: localStorage আপডেট করা
+            const savedAuth = JSON.parse(localStorage.getItem('adminAuth'));
+            if(savedAuth) {
+                localStorage.setItem('adminAuth', JSON.stringify({...savedAuth, name: newName}));
+            }
+
+        } catch (error) {
+            alert('❌ প্রোফাইল আপডেট ব্যর্থ: ' + error.message);
+        }
+    });
+
+    // --- পাসওয়ার্ড পরিবর্তন লজিক (পাসওয়ার্ড ট্রিম করে ঠিক করা হয়েছে) ---
+    document.getElementById('change-password-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const currentPass = document.getElementById('current-password').value;
+        const newPass = document.getElementById('new-password').value;
+        const msgNode = document.getElementById('password-message');
+        msgNode.innerText = 'পরিবর্তন করা হচ্ছে...';
+        msgNode.style.color = '#ff9800'; 
+        
+        if (!currentAdminUser) {
+            msgNode.innerText = 'লগইন সেশন নেই।';
+            return;
+        }
+
+        try {
+            const userRef = ref(db, 'user/' + currentAdminUser.username);
+            const snap = await get(userRef);
+            const userData = snap.val();
+
+            const storedPassword = userData.password ? String(userData.password).trim() : '';
+            
+            if (storedPassword !== currentPass) {
+                msgNode.innerText = '❌ বর্তমান পাসওয়ার্ড সঠিক নয়।';
+                msgNode.style.color = '#F44336';
+                return;
+            }
+            
+            await update(userRef, {
+                password: newPass
+            });
+            
+            msgNode.innerText = '✅ পাসওয়ার্ড সফলভাবে পরিবর্তন করা হয়েছে।';
+            msgNode.style.color = 'var(--primary-color)'; 
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+
+            // ** নতুন: localStorage আপডেট করা **
+            const savedAuth = JSON.parse(localStorage.getItem('adminAuth'));
+            if(savedAuth && savedAuth.username === currentAdminUser.username) {
+                localStorage.setItem('adminAuth', JSON.stringify({...savedAuth, password: newPass}));
+            }
+
+        } catch (error) {
+            msgNode.innerText = '❌ পাসওয়ার্ড পরিবর্তন ব্যর্থ: ' + error.message;
+            msgNode.style.color = '#F44336';
+        }
+    });
+
+
+    // Utility: show section
+    document.querySelectorAll('.bm-item').forEach(it=>{
+      it.addEventListener('click', ()=>{
+        document.querySelectorAll('.bm-item').forEach(i=>i.classList.remove('active'));
+        it.classList.add('active');
+        const id = it.dataset.id;
+        document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+
+        // অর্ডার পেজ লোড করা
+        if (id === 'orders') {
+            // default to Pending filter on opening
+            loadOrdersByStatus('Pending'); 
+        }
+      })
+    });
+    
+    // UTILITY: Quantity Conversion
+    function convertToKg(qtyStr) {
+        if (!qtyStr) return 0;
+        const lowerStr = qtyStr.toLowerCase().trim();
+        const value = parseFloat(lowerStr.replace(/[^0-9.]/g, '')) || 0;
+        
+        if (lowerStr.includes('kg')) {
+            return value;
+        } else if (lowerStr.includes('g')) {
+            return value / 1000;
+        }
+        return value; // If no unit is found, assume it's kg by default or based on context
+    }
+
+    // --- DASHBOARD (পরিবর্তিত: Quantity Aggregation ও Money Format) ---
+    async function loadOrdersAndStats() {
+      const ordersRef = ref(db, 'order'); 
+      const snap = await get(ordersRef);
+      const data = snap.exists() ? snap.val() : {};
+      allOrdersData = data; // ক্যাশ করা
+    
+      const statusCount = { pending: 0, accept: 0, complete: 0, cancel: 0, delivery: 0 };
+      const aggPending = {};
+      const aggAccept = {};
+      let totalPendingPrice = 0; // NEW
+      let totalAcceptPrice = 0; // NEW
+    
+      for (const id in data) {
+        const order = data[id];
+        const st = (order.status || 'pending').toLowerCase();
+        if (statusCount[st] === undefined) statusCount[st] = 0;
+        statusCount[st]++;
+    
+        const items = order.item || '';
+        if (items) {
+          const lines = items.split(',').map(s => s.trim()).filter(Boolean);
+    
+          function addTo(agg, line, status) {
+            const parts = line.split('-');
+            if (parts.length >= 4) {
+              const name = parts[0];
+              const qtyStr = parts[1];
+              // CHANGED: Extract price string and remove currency/non-numeric chars
+              const priceStr = parts[2].replace(/[^0-9.]/g, '') || '0'; 
+              const price = parseFloat(priceStr);
+              const qtyKg = convertToKg(qtyStr); // CHANGED: Convert to KG
+              
+              if (!agg[name]) agg[name] = { qty: 0, price: 0, count: 0 }; 
+              agg[name].qty += qtyKg; // CHANGED: Add in KG
+              agg[name].price += price;
+              agg[name].count++;
+              
+              // NEW: Calculate total price
+              if (status === 'pending') totalPendingPrice += price;
+              if (status === 'accept') totalAcceptPrice += price;
+            }
+          }
+    
+          if (st === 'pending') lines.forEach(l => addTo(aggPending, l, 'pending'));
+          if (st === 'accept' || st === 'delivery' || st === 'complete') lines.forEach(l => addTo(aggAccept, l, 'accept')); // Accept, Delivery, Complete all count towards Agg Accept
+        }
+      }
+    
+      // Dashboard Tiles Update
+      document.getElementById('cnt-pending').innerText = statusCount.pending || 0;
+      document.getElementById('cnt-accept').innerText = statusCount.accept || 0;
+      document.getElementById('cnt-complete').innerText = statusCount.complete || 0;
+      document.getElementById('cnt-cancel').innerText = statusCount.cancel || 0;
+
+      // Order Page Tiles Update (নতুন)
+      document.getElementById('ord-cnt-pending').innerText = statusCount.pending || 0;
+      document.getElementById('ord-cnt-accept').innerText = statusCount.accept || 0;
+      document.getElementById('ord-cnt-complete').innerText = statusCount.complete || 0;
+      document.getElementById('ord-cnt-cancel').innerText = statusCount.cancel || 0;
+      document.getElementById('ord-cnt-delivery').innerText = statusCount.delivery || 0;
+    
+      // CHANGED: Render Aggregation with KG and RM
+      function renderAgg(map, total) {
+        if (Object.keys(map).length === 0)
+          return '<div class="small" style="padding: 5px;">কোনো পণ্য নেই।</div>';
+          
+        let listHTML = '<ul style="list-style: none; padding: 0;">';
+        
+        Object.entries(map)
+          .sort((a, b) => b[1].qty - a[1].qty) // সবচেয়ে বেশি পরিমাণের পণ্য প্রথমে
+          .forEach(
+            ([name, v]) => {
+              // Format Quantity and Price
+              const formattedQty = v.qty % 1 === 0 ? v.qty.toFixed(0) : v.qty.toFixed(2);
+              const formattedPrice = v.price.toFixed(2);
+              
+              listHTML += `<li style="padding: 5px 0; border-bottom: 1px dotted #ccc; font-size: 0.9rem;"><strong>${name}</strong> — মোট ${formattedQty}kg &nbsp; RM ${formattedPrice}</li>`;
+            }
+          );
+          
+        listHTML += `</ul>
+        <div style="border-top: 1px solid #ccc; padding-top: 5px; margin-top: 5px; text-align: right; font-weight: bold;">
+          মোট: RM ${total.toFixed(2)}
+        </div>`;
+        return listHTML;
+      }
+    
+      document.getElementById('agg-pending').innerHTML = renderAgg(aggPending, totalPendingPrice);
+      document.getElementById('agg-accept').innerHTML = renderAgg(aggAccept, totalAcceptPrice);
+    
+      // অর্ডার পেজ যদি অ্যাক্টিভ থাকে তাহলে অর্ডার লোড করা
+      if (document.getElementById('orders').classList.contains('active')) {
+          const fs = document.getElementById('filter-status').value;
+          loadOrdersByStatus(fs);
+      }
+    
+      loadCategories();
+      loadProducts();
+    }
+
+    // --- ORDERS PAGE FILTERS AND SEARCH (পরিবর্তিত) ---
+    
+    // স্ট্যাটাস টাইলস ক্লিক হ্যান্ডলার (নতুন)
+    document.querySelectorAll('#order-status-tiles .stat').forEach(tile => {
+        tile.addEventListener('click', () => {
+            const status = tile.dataset.status;
+            document.getElementById('filter-status').value = status;
+            loadOrdersByStatus(status);
+            // টাইল স্টাইল পরিবর্তন
+            document.querySelectorAll('#order-status-tiles .stat').forEach(t => t.classList.remove('active'));
+            tile.classList.add('active');
+        });
+    });
+
+    // প্রথমবার লোড করার সময় ডিফল্ট টাইল অ্যাক্টিভ করা
+    document.addEventListener('DOMContentLoaded', () => {
+        // ... পূর্বের কোড
+        // if (document.getElementById('orders').classList.contains('active')) { ... }
+        // এটি মেইন অ্যাপ লোড হওয়ার পর কল হবে
+    });
+
+    // অর্ডার ID সার্চ হ্যান্ডলার (নতুন)
+    document.getElementById('order-search-input').addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+        if (query) {
+            displayOrderDetails(query);
+            // স্ট্যাটাস টাইলস এবং ফিল্টার রিসেট করা
+            document.querySelectorAll('#order-status-tiles .stat').forEach(t => t.classList.remove('active'));
+            document.getElementById('current-filter-display').innerText = 'ID Search';
+        } else {
+            // সার্চ খালি হলে বর্তমান স্ট্যাটাস অনুযায়ী অর্ডার লোড করা
+            const status = document.getElementById('filter-status').value;
+            loadOrdersByStatus(status);
+        }
+    });
+
+    function displayOrderDetails(orderId) {
+        const order = allOrdersData[orderId];
+        const listNode = document.getElementById('orders-list');
+        listNode.innerHTML = '';
+        
+        if (!order) {
+            listNode.innerHTML = '<div class="small" style="padding: 10px; text-align: center; color: #F44336;">❌ এই ID-তে কোনো অর্ডার খুঁজে পাওয়া যায়নি।</div>';
+            return;
+        }
+
+        renderOrderCard(orderId, order, listNode);
+    }
+    
+    // --- loadOrdersByStatus (অপরিবর্তিত) ---
+
+    async function loadOrdersByStatus(status) {
+      if (Object.keys(allOrdersData).length === 0) {
+        // যদি ক্যাশ ডেটা না থাকে, আবার লোড করুন
+        await loadOrdersAndStats();
+      }
+
+      const listNode = document.getElementById('orders-list');
+      listNode.innerHTML = '';
+      
+      // ডিসপ্লে আপডেট
+      document.getElementById('filter-status').value = status;
+      document.getElementById('current-filter-display').innerText = status;
+      
+      // টাইল হাইলাইট করা
+      document.querySelectorAll('#order-status-tiles .stat').forEach(t => {
+          t.classList.remove('active');
+          if (t.dataset.status === status) {
+              t.classList.add('active');
+          }
+      });
+
+      let found = false;
+      for (const id in allOrdersData) {
+        const order = allOrdersData[id];
+        const st = (order.status || 'pending').toLowerCase();
+        if (st !== status.toLowerCase()) continue;
+
+        renderOrderCard(id, order, listNode);
+        found = true;
+      }
+
+      if (!found)
+        listNode.innerHTML =
+          '<div class="small" style="padding: 10px; text-align: center;">এই স্ট্যাটাসে কোনো অর্ডার নেই।</div>';
+    }
+
+    // অর্ডার কার্ড রেন্ডারিং ফাংশন (পরিবর্তিত: Money Format)
+    function renderOrderCard(id, order, listNode) {
+        const st = (order.status || 'pending').toLowerCase();
+        const cust = order.name || 'Unknown';
+        const addr = order.address || '-';
+        const phone = order.number || '-';
+        const itemsRaw = order.item || '';
+        const items = itemsRaw.split(',').map(s => s.trim()).filter(Boolean);
+
+        const container = document.createElement('div');
+        container.className = 'order-card';
+        const statusColor =
+          st === 'pending'
+            ? '#ff9800'
+            : st === 'accept'
+            ? '#4CAF50'
+            : st === 'complete'
+            ? '#2196F3'
+            : st === 'delivery'
+            ? '#9C27B0'
+            : '#F44336';
+        container.style.borderLeft = `5px solid ${statusColor}`;
+
+        container.innerHTML = `
+          <div class="order-meta">
+            <div>
+              <strong style="font-size: 1.1rem; color: ${statusColor};">${cust} (${phone})</strong>
+            </div>
+            <div class="badge" style="background-color: ${statusColor}; text-transform: capitalize;">${st}</div>
+          </div>
+          <div class="small" style="margin-bottom: 8px;">ডেলিভারি ঠিকানা: ${addr}</div>
+          <div class="items" id="items-${id}"></div>
+          <div style="margin-top:12px;display:flex;gap:8px; justify-content: flex-end;">
+            <div style="margin-right:auto" class="small">ID: ${id}</div>
+            ${st === 'pending'
+              ? `
+              <button class="btn" data-id="${id}" data-action="accept" style="background-color: var(--primary-color);">Accept</button>
+              <button class="btn ghost" data-id="${id}" data-action="cancel" style="border-color: #F44336; color: #F44336;">Cancel</button>`
+              : ''}
+            ${st === 'accept'
+              ? `<button class="btn" data-id="${id}" data-action="delivery" style="background-color: var(--secondary-color);">🚚 ডেলিভারি দিন</button>`
+              : ''}
+            ${st === 'delivery'
+              ? `<button class="btn" data-id="${id}" data-action="complete" style="background-color: #2196F3;">✅ সম্পন্ন করুন</button>`
+              : ''}
+          </div>
+        `;
+        listNode.appendChild(container);
+
+        const itemsNode = container.querySelector(`#items-${id}`);
+        items.forEach((it, idx) => {
+          const parts = it.split('-');
+          const name = parts[0];
+          const qty = parts[1];
+          const price = parts[2]; // Includes 'RM' now
+          const state = parts[3];
+
+          const line = document.createElement('div');
+          line.className = 'item-line';
+
+          let controls_html = '';
+          if (st === 'pending') {
+            const okColor = state === '✅' ? 'var(--primary-color)' : '#ccc';
+            const noColor = state === '❌' ? '#F44336' : '#ccc';
+            controls_html = `
+              <div style="display:flex;gap:6px;">
+                <i class="fas fa-check-circle icon-btn" style="color: ${okColor}; font-size: 1.1rem;" onclick="markItemWrapper('${id}', ${idx}, 'ok', this)"></i>
+                <i class="fas fa-times-circle icon-btn" style="color: ${noColor}; font-size: 1.1rem;" onclick="markItemWrapper('${id}', ${idx}, 'no', this)"></i>
+              </div>
+            `;
+          } else {
+            const icon =
+              state === '✅'
+                ? '<i class="fas fa-check-circle" style="color: var(--primary-color);"></i>'
+                : state === '❌'
+                ? '<i class="fas fa-times-circle" style="color: #F44336;"></i>'
+                : '';
+            controls_html = `<div class="small" style="font-weight: bold;">${icon}</div>`;
+          }
+
+          // CHANGED: Display price with RM (already in the data)
+          line.innerHTML = `<div>${name} - ${qty} - ${price}</div>${controls_html}`; 
+          itemsNode.appendChild(line);
+        });
+
+        // অ্যাকশন বাটন হ্যান্ডলার
+        container.querySelector('[data-action="accept"]')?.addEventListener('click', async () => {
+          await applyStatusToOrder(id, 'Accept'); // ক্যাপিটালাইজড স্ট্যাটাস
+          await loadOrdersAndStats();
+        });
+        container.querySelector('[data-action="cancel"]')?.addEventListener('click', async () => {
+          await applyStatusToOrder(id, 'Cancel');
+          await loadOrdersAndStats();
+        });
+        container.querySelector('[data-action="delivery"]')?.addEventListener('click', async () => {
+          await applyStatusToOrder(id, 'Delivery');
+          await loadOrdersAndStats();
+        });
+        container.querySelector('[data-action="complete"]')?.addEventListener('click', async () => {
+          await applyStatusToOrder(id, 'Complete');
+          await loadOrdersAndStats();
+        });
+    }
+
+
+    // ✅❌ মার্ক করার র‍্যাপার (অপরিবর্তিত)
+    window.markItemWrapper = async function (orderId, itemIndex, which, element) {
+      await markItem(orderId, itemIndex, which);
+      const parent = element.closest('.item-line');
+      const icons = parent.querySelectorAll('.icon-btn');
+      icons.forEach(icon => (icon.style.color = '#ccc'));
+      element.style.color = which === 'ok' ? 'var(--primary-color)' : '#F44336';
+    };
+
+    // ✅❌ Firebase আপডেট (অপরিবর্তিত)
+    async function markItem(orderId, itemIndex, which) {
+      const orderRef = ref(db, 'order/' + orderId);
+      const snap = await get(orderRef);
+      if (!snap.exists()) return;
+      const order = snap.val();
+      let items = order.item || '';
+      let arr = items.split(',').map(s => s.trim()).filter(Boolean);
+      if (arr[itemIndex] === undefined) return;
+
+      arr[itemIndex] = arr[itemIndex].replace(/-(pending|✅|❌)$/g, '') + (which === 'ok' ? '-✅' : '-❌');
+
+      await update(orderRef, { item: arr.join(',') });
+    }
+
+    // অর্ডার স্ট্যাটাস পরিবর্তন (অপরিবর্তিত)
+    async function applyStatusToOrder(orderId, newStatus) {
+      const orderRef = ref(db, 'order/' + orderId);
+      await update(orderRef, { status: newStatus });
+    }
+
+    // --- CATEGORIES (অপরিবর্তিত) ---
+    document.getElementById('add-cat-btn').addEventListener('click', ()=>{
+      document.getElementById('cat-form').style.display='block';
+      document.getElementById('cat-form-title').innerText='Add Category';
+      document.getElementById('cat-name').value=''; document.getElementById('cat-image').value='';
+    });
+    document.getElementById('cat-cancel').addEventListener('click', ()=>{ document.getElementById('cat-form').style.display='none'; });
+    
+    document.getElementById('cat-save').addEventListener('click', async ()=>{
+      const name = document.getElementById('cat-name').value.trim();
+      const img = document.getElementById('cat-image').value.trim();
+      if(!name) return alert('Name required');
+      const key = push(ref(db,'catagory')).key;
+      const payload = { name, image: img };
+      await set(ref(db,'catagory/' + key), payload);
+      document.getElementById('cat-form').style.display='none';
+      await loadCategories();
+    });
+
+    async function loadCategories(){
+      const snap = await get(ref(db,'catagory'));
+      const data = snap.exists()? snap.val(): {};
+      document.getElementById('cat-count').innerText = Object.keys(data).length;
+      const wrap = document.getElementById('cat-table');
+      let html = '<table><thead><tr><th>Image</th><th>ক্যাটাগরির নাম</th><th>ID</th><th>অ্যাকশন</th></tr></thead><tbody>';
+      for(const id in data){
+        const c = data[id];
+        html += `<tr><td><img src="${c.image||'https://via.placeholder.com/48'}" alt="${c.name}" class="table-image-sm"></td><td>${c.name}</td><td>${id}</td><td><div class="action-btns"><button class="btn" style="padding: 8px 12px; background-color: var(--secondary-color);" onclick="editCategory('${id}')"><i class="fas fa-edit"></i> Edit</button> <button class="btn ghost" style="padding: 8px 12px; border-color: #F44336; color: #F44336;" onclick="deleteCategory('${id}')"><i class="fas fa-trash-alt"></i> Delete</button></div></td></tr>`;
+      }
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+      // expose functions for inline onclick
+      window.editCategory = async (id)=>{
+        const s = await get(ref(db,'catagory/' + id)); if(!s.exists()) return alert('Not found');
+        const c = s.val(); document.getElementById('cat-form').style.display='block'; document.getElementById('cat-form-title').innerText='Edit Category'; document.getElementById('cat-name').value=c.name||''; document.getElementById('cat-image').value=c.image||'';
+        // override save handler temporarily
+        document.getElementById('cat-save').onclick = async ()=>{ const name=document.getElementById('cat-name').value.trim(); const img=document.getElementById('cat-image').value.trim(); await update(ref(db,'catagory/' + id), { name, image: img }); document.getElementById('cat-form').style.display='none'; await loadCategories(); document.getElementById('cat-save').onclick = defaultCatSave; };
+      };
+      window.deleteCategory = async (id)=>{ if(confirm('Delete category?')){ await remove(ref(db,'catagory/' + id)); await loadCategories(); } };
+    }
+    const defaultCatSave = document.getElementById('cat-save').onclick;
+
+    // --- PRODUCTS (অপরিবর্তিত) ---
+    document.getElementById('add-prod-btn').addEventListener('click', async ()=>{
+      // populate category select
+      await populateCatSelect();
+      document.getElementById('prod-form').style.display='block';
+      document.getElementById('prod-form-title').innerText='Add Product';
+      document.getElementById('prod-name').value=''; document.getElementById('prod-image').value=''; document.getElementById('prod-price').value=''; document.getElementById('prod-variant').value='';
+    });
+    document.getElementById('prod-cancel').addEventListener('click', ()=>{ document.getElementById('prod-form').style.display='none'; });
+
+    async function populateCatSelect(){
+      const snap = await get(ref(db,'catagory')); const data = snap.exists()? snap.val(): {};
+      const sel = document.getElementById('prod-cat'); sel.innerHTML='';
+      for(const id in data){ const c=data[id]; const opt = document.createElement('option'); opt.value = c.name || id; opt.innerText = c.name || id; sel.appendChild(opt); }
+    }
+
+    document.getElementById('prod-save').addEventListener('click', async ()=>{
+      const cat = document.getElementById('prod-cat').value; const name = document.getElementById('prod-name').value.trim(); const img = document.getElementById('prod-image').value.trim(); const price = parseFloat(document.getElementById('prod-price').value) || 0; const variant = document.getElementById('prod-variant').value;
+      if(!name) return alert('Product name required');
+      const key = push(ref(db,'product')).key;
+      const payload = { 'catagory name': cat, 'product image': img, 'products name': name, 'product price': price, 'product variant': variant };
+      await set(ref(db,'product/' + key), payload);
+      document.getElementById('prod-form').style.display='none';
+      await loadProducts();
+    });
+
+    async function loadProducts(){
+      const snap = await get(ref(db,'product')); const data = snap.exists()? snap.val(): {};
+      document.getElementById('prod-count').innerText = Object.keys(data).length;
+      const wrap = document.getElementById('prod-table');
+      let html = '<table><thead><tr><th>Image</th><th>ID</th><th>নাম</th><th>ক্যাটাগরি</th><th>দাম</th><th>ভেরিয়েন্ট</th><th>অ্যাকশন</th></tr></thead><tbody>';
+      for(const id in data){ const p=data[id]; html += `<tr><td><img src="${p['product image']||'https://via.placeholder.com/48'}" alt="${p['products name']}" class="table-image-sm"></td><td>${id}</td><td>${p['products name']}</td><td>${p['catagory name']}</td><td>${p['product price']} টাকা</td><td>${p['product variant']}</td><td><div class="action-btns"><button class="btn" style="padding: 8px 12px; background-color: var(--secondary-color);" onclick="editProduct('${id}')"><i class="fas fa-edit"></i> Edit</button> <button class="btn ghost" style="padding: 8px 12px; border-color: #F44336; color: #F44336;" onclick="deleteProduct('${id}')"><i class="fas fa-trash-alt"></i> Delete</button></div></td></tr>` }
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+      window.editProduct = async (id)=>{
+        const s = await get(ref(db,'product/' + id)); if(!s.exists()) return alert('Not found'); const p=s.val(); await populateCatSelect(); document.getElementById('prod-form').style.display='block'; document.getElementById('prod-form-title').innerText='Edit Product'; document.getElementById('prod-name').value=p['products name']||''; document.getElementById('prod-image').value=p['product image']||''; document.getElementById('prod-price').value=p['product price']||''; document.getElementById('prod-variant').value=p['product variant']||''; document.getElementById('prod-cat').value = p['catagory name'] || document.getElementById('prod-cat').options[0].value;
+        document.getElementById('prod-save').onclick = async ()=>{ const payload = { 'catagory name': document.getElementById('prod-cat').value, 'product image': document.getElementById('prod-image').value, 'products name': document.getElementById('prod-name').value, 'product price': parseFloat(document.getElementById('prod-price').value)||0, 'product variant': document.getElementById('prod-variant').value }; await update(ref(db,'product/' + id), payload); document.getElementById('prod-form').style.display='none'; await loadProducts(); document.getElementById('prod-save').onclick = defaultProdSave; };
+      };
+      window.deleteProduct = async (id)=>{ if(confirm('Delete product?')){ await remove(ref(db,'product/' + id)); await loadProducts(); } };
+    }
+    const defaultProdSave = document.getElementById('prod-save').onclick;
+
+    // search (অপরিবর্তিত)
+    document.getElementById('prod-search').addEventListener('input', async (e)=>{
+      const q = e.target.value.toLowerCase(); const snap = await get(ref(db,'product')); const data = snap.exists()? snap.val(): {}; const wrap = document.getElementById('prod-table');
+      let html = '<table><thead><tr><th>Image</th><th>ID</th><th>নাম</th><th>ক্যাটাগরি</th><th>দাম</th><th>ভেরিয়েন্ট</th><th>অ্যাকশন</th></tr></thead><tbody>';
+      for(const id in data){ const p = data[id]; const text = ((p['products name']||'') + ' ' + (p['catagory name']||'') + ' ' + id).toLowerCase(); if(text.includes(q)) html += `<tr><td><img src="${p['product image']||'https://via.placeholder.com/48'}" alt="${p['products name']}" class="table-image-sm"></td><td>${id}</td><td>${p['products name']}</td><td>${p['catagory name']}</td><td>${p['product price']} টাকা</td><td>${p['product variant']}</td><td><div class="action-btns"><button class="btn" style="padding: 8px 12px; background-color: var(--secondary-color);" onclick="editProduct('${id}')"><i class="fas fa-edit"></i> Edit</button> <button class="btn ghost" style="padding: 8px 12px; border-color: #F44336; color: #F44336;" onclick="deleteProduct('${id}')"><i class="fas fa-trash-alt"></i> Delete</button></div></td></tr>` }
+      html += '</tbody></table>';
+      wrap.innerHTML = html;
+    });
+
+    // refresh every 20 seconds when panel open (optional)
+    setInterval(()=>{ 
+        if(currentAdminUser) loadOrdersAndStats(); 
+    }, 20000);
+
+    // expose functions to window for inline handlers that were created dynamically
+    window.loadOrdersByStatus = loadOrdersByStatus;
+    window.loadCategories = loadCategories;
+    window.loadProducts = loadProducts;
+    
+  </script>
+</body>
+</html>

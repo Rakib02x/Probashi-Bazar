@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FreshMart — আপনার পছন্দের গ্রোসারি</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
+  
+  
+  
+  <style>
+    /* আপনার দেওয়া বেস CSS স্টাইল */
+    :root{
+      --accent:#10B981; /* green */
+      --accent-2:#059669;
+      --bg:#f6f8fb;
+      --card:#ffffff;
+      --muted:#6b7280;
+      --shadow: 0 6px 18px rgba(16,24,40,0.08);
+      --red-hot: #e63946;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans Bengali', sans-serif;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:#0f172a}
+    
+    /* --- নতুন ShopNow Header স্টাইল শুরু --- */
+    
+    /* Material Symbols Icon ফন্ট ইমপোর্ট করা হয়েছে */
+    @import url('https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined');
+
+    /* প্রধান হেডার কন্টেইনার */
+    .shopnow-header-container {
+        background-color: var(--bg); /* f6f8fb */
+        padding: 0px;
+        max-width: 100%; /* মেইন HTML এর জন্য পূর্ণ প্রস্থ */
+        margin: 0 auto;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    /* সবুজ রঙের হেডার বার */
+    .header-bar {
+        background-color: var(--accent); /* #10B981 */
+        padding: 10px 18px; 
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+    }
+
+    /* মেনু আইকন (তিনটি লাইন) */
+    .menu-icon {
+        cursor: pointer;
+        line-height: 0.8;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        height: 20px;
+        width: 25px;
+    }
+
+    .menu-icon span {
+        display: block;
+        width: 25px;
+        height: 3px;
+        background: #fff;
+        margin: 3px 0;
+        border-radius: 2px;
+    }
+
+    /* লোগোর নাম */
+    .logo-text {
+        font-size: 30px;
+        font-weight: bold;
+        color: #fff;
+        flex-grow: 1;
+        text-align: left;
+        margin-left: 10px;
+    }
+   .logo {
+        width: 140px;
+   }
+
+    /* ডানদিকের আইকন কন্টেইনার */
+    .icon-group-top {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    /* Material Symbols Icon বেস স্টাইল */
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        color: #fff;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* কার্ট আইকন কন্টেইনার */
+    .cart-icon-container {
+        position: relative;
+        cursor: pointer;
+        padding: 5px;
+    }
+    
+    /* সার্চ আইকন (লগইন বাটনের কাজ করবে) */
+    .search-icon-top {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        color: #fff;
+        font-weight: 600;
+    }
+
+    .search-icon-top .material-symbols-outlined {
+        font-size: 20px;
+        margin-right: 5px;
+    }
+    .search-icon-top .user-name-text {
+        font-size: 16px;
+        line-height: 1;
+    }
+
+
+    /* কার্ট সংখ্যার ব্যাজ */
+    .cart-badge {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        background-color: #000;
+        color: #fff;
+        font-size: 11px;
+        font-weight: bold;
+        border-radius: 50%;
+        padding: 2px 5px;
+        line-height: 1;
+        min-width: 20px;
+        text-align: center;
+        border: 1px solid var(--accent);
+    }
+
+    /* সার্চ বার এর কন্টেইনার */
+    .search-bar-section {
+        display: flex;
+        background-color: var(--accent);
+        align-items: center;
+        padding: 10px 18px 15px 18px;
+    }
+
+    /* সার্চ ইনপুট ফিল্ড */
+    .search-input-new {
+        flex-grow: 1;
+        padding: 12px 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        color: #333;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    /* সার্চ বাটন */
+    .search-button {
+        background-color: #fff;
+        color: var(--accent);
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-button:hover {
+        background-color: #e0e0e0;
+        color: var(--accent-2);
+    }
+    /* --- নতুন ShopNow Header স্টাইল শেষ --- */
+
+
+    /* BANNER / SLIDER */
+    .hero{max-width:1200px;margin:18px auto;padding:0 18px}
+    .slider{position:relative;border-radius:14px;overflow:hidden;box-shadow:var(--shadow);background:linear-gradient(180deg,#fff,#f3faf4)}
+    .slides{display:flex;transition:transform 450ms ease}
+    .slide{min-width:100%;display:flex;align-items:center;gap:24px;padding:28px}
+    .slide img{width:50%;height:220px;object-fit:cover;border-radius:12px}
+    .slide .copy{flex:1}
+    .slide h2{margin:0;font-size:24px}
+    .slide p{color:var(--muted);margin:6px 0 12px}
+    .slider .controls{position:absolute;right:12px;bottom:12px;display:flex;gap:8px}
+    .ctrl{background:#fff;border-radius:8px;padding:6px 10px;box-shadow:0 6px 20px rgba(2,6,23,0.08);cursor:pointer}
+
+    /* CATEGORIES */
+    .cats{margin:18px auto;max-width:1200px;padding:0 18px}
+    .cats .row{display:flex;gap:14px;overflow-x:auto;padding-bottom:8px}
+    .cat{flex:0 0 auto;text-align:center;width:84px;cursor:pointer;}
+    .cat img{width:84px;height:84px;border-radius:999px;object-fit:cover;box-shadow:var(--shadow);display:block;margin:0 auto;border:3px solid #fff;transition:border-color 0.2s;}
+    .cat:hover img{border-color:var(--accent);}
+    .cat p{margin:8px 0 0;font-size:13px;color:var(--muted)}
+
+    /* PRODUCTS */
+    .container{max-width:1200px;margin:18px auto;padding:0 18px}
+    .category-block{margin-bottom:26px}
+    .category-block h3{margin:6px 0 12px;font-size:18px}
+    .products{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+    .card{background:var(--card);padding:12px;border-radius:12px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:8px}
+    .card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+    .card .name{font-weight:600;font-size:14px}
+    .card .price{color:var(--accent-2);font-weight:700}
+    .btn{background:var(--accent);color:#fff;border:none;padding:8px 10px;border-radius:10px;cursor:pointer;font-weight:600;}
+    .add-to-cart-btn{flex-grow:1;transition:background-color 0.2s;}
+
+    /* FOOTER */
+    footer{background:#0f172a;color:#fff;padding:28px 18px;margin-top:28px}
+    .footer-grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:18px}
+    .footer-grid h4{margin:0 0 8px}
+    .muted{color:#9ca3af}
+    .socials{display:flex;gap:10px;margin-top:8px}
+
+    /* Responsive */
+    @media (max-width:900px){
+      .slide img{display:none}
+      .products{grid-template-columns:repeat(2,1fr)}
+      .brand{font-size:16px}
+    }
+    @media (max-width:520px){
+        /* নতুন হেডারের জন্য ছোট স্ক্রিনের স্টাইল আপডেট */
+        .header-bar{padding: 10px 14px;}
+        .search-bar-section{padding: 10px 14px 15px 14px;}
+        .logo-text{font-size: 20px; margin-left: 5px;}
+
+        /* পুরনো স্টাইল */
+        .products{grid-template-columns:repeat(2,1fr)}
+        .slide{padding:18px}
+        .footer-grid{grid-template-columns:repeat(2,1fr);}
+    }
+
+    /* small niceties */
+    .tag{display:inline-block;padding:6px 8px;border-radius:999px;background:#eefaf2;color:var(--accent-2);font-weight:600;font-size:12px}
+    .price-per{font-size:13px;color:var(--muted)}
+    
+    /* === নতুন স্টাইল সংযোজন === */
+    
+    /* মডাল (Login/Register/COD) */
+    .modal {
+        display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
+    }
+    .modal-content {
+        background-color: var(--card); margin: 15% auto; padding: 24px; border-radius: 12px; width: 90%; max-width: 400px; position: relative; box-shadow: var(--shadow);
+        animation: fadeIn 0.3s;
+    }
+    .modal-content h2{margin:0 0 16px;}
+    .close-modal-btn {
+        color: var(--muted); float: right; font-size: 28px; font-weight: bold; cursor: pointer; position: absolute; top: 12px; right: 18px;
+    }
+    .form-group{margin-bottom:12px;}
+    .modal-content input {
+        width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s;
+    }
+    .modal-content input:focus{border-color:var(--accent);}
+    .login-form {display: none; flex-direction: column; gap: 10px;}
+    .login-form.active {display: flex;}
+    .switch-link {text-align: center; margin-top: 15px; font-size: 14px;}
+    .switch-link span {color: var(--accent); cursor: pointer; font-weight: bold;}
+
+    /* বটম শীট (Product Variant Selection) */
+    .bottom-sheet {
+        position: fixed; left: 0; bottom: 0; width: 100%; background-color: var(--card); z-index: 2100; border-top-left-radius: 18px; border-top-right-radius: 18px; box-shadow: 0 -8px 18px rgba(0, 0, 0, 0.15);
+        transform: translateY(100%); transition: transform 0.4s ease-out;
+    }
+    .bottom-sheet.active {transform: translateY(0);}
+    .sheet-content {padding: 20px 18px;}
+    .sheet-details {display: flex; gap: 15px; align-items: center; margin-bottom: 20px;}
+    .sheet-prod-img {width: 70px; height: 70px; object-fit: cover; border-radius: 8px;}
+    .sheet-sub-title {font-size: 1rem; margin-bottom: 10px; font-weight: 600;}
+    .variant-choices {display: flex; overflow-x: auto; gap: 10px; padding-bottom: 15px; scroll-snap-type: x mandatory;}
+    .variant-btn {
+        background-color: var(--bg); border: 1px solid #ccc; padding: 8px 12px; border-radius: 20px; cursor: pointer; white-space: nowrap; font-size: 0.9rem; transition: all 0.2s; scroll-snap-align: start;
+    }
+    .variant-btn.selected {background-color: var(--accent); color: var(--card); border-color: var(--accent); font-weight: 600;}
+    .sheet-action-bar {display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #eee;}
+    .price-display {font-size: 1.2rem; font-weight: bold; color: var(--accent-2);}
+    .sheet-action-bar .btn {width: 45%; margin: 0; padding: 10px;}
+
+    /* কুইক চেকআউট সাইডবার (Quick Checkout Sidebar) */
+    .cart-sidebar {
+        position: fixed; top: 0; right: 0; width: 85%; max-width: 380px; height: 100%; background-color: var(--card); z-index: 1080; box-shadow: -6px 0 15px rgba(0, 0, 0, 0.1);
+        transform: translateX(100%); transition: transform 0.4s ease-out; display: flex; flex-direction: column;
+    }
+    .cart-sidebar.open {transform: translateX(0);}
+    .sidebar-header {display: flex; justify-content: space-between; align-items: center; padding: 18px; border-bottom: 1px solid #eee; background:var(--accent); color:#fff; border-top-right-radius:12px; border-top-left-radius:12px;}
+    .sidebar-header h3{margin:0;}
+    .close-sidebar-btn {font-size: 28px; background: none; border: none; cursor: pointer; color:#fff;}
+    .cart-items {flex-grow: 1; overflow-y: auto; padding: 18px;}
+    .empty-cart-msg {text-align: center; color: var(--muted); margin-top: 20px;}
+    .sidebar-footer {padding: 18px; border-top: 1px solid #eee;}
+    .checkout-total {display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; margin-bottom: 15px;}
+    .checkout-btn {display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; margin-bottom: 10px; cursor: pointer; font-weight: bold; font-size: 1rem;}
+    .online-payment-btn {background-color: #3b82f6; color: var(--card); box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);}
+    .cod-btn {background-color: var(--red-hot); color: var(--card); box-shadow: 0 4px 10px rgba(230, 57, 70, 0.5); border:2px solid var(--red-hot); transition: all 0.2s;}
+
+    /* COD মডাল স্টাইল */
+    .cod-form {display: flex; flex-direction: column; gap: 12px;}
+    .order-summary {background-color: var(--bg); padding: 12px; border-radius: 8px; border: 1px dashed var(--accent);}
+    .order-summary h4 {margin-bottom: 5px; color: var(--accent-2);}
+    .confirm-btn{background-color:var(--accent);}
+
+    /* এনিমেশন: পালস (ক্যাশ অন ডেলিভারি) */
+    @keyframes pulse {
+        0% {box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.4);}
+        70% {box-shadow: 0 0 0 10px rgba(230, 57, 70, 0);}
+        100% {box-shadow: 0 0 0 0 rgba(230, 57, 70, 0);}
+    }
+    .pulse-animation {animation: pulse 1.5s infinite;}
+
+    /* প্রোডাক্ট অ্যাড টু কার্ট এনিমেশন (উড়ে যাওয়ার জন্য) */
+    @keyframes flyToCart {
+        to {transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0;}
+    }
+    .flying-product {
+        position: fixed; width: 40px; height: 40px; z-index: 2500; border-radius: 50%; object-fit: cover;
+        animation: flyToCart 0.8s ease-in forwards;
+        box-shadow: var(--shadow);
+    }
+    
+    /* কার্ট আইটেম স্টাইল */
+    .cart-item {
+        display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f1f1f1;
+    }
+    .cart-item-details {
+        display: flex; gap: 10px; align-items: center;
+    }
+    .remove-cart-item-btn {
+        background: none; border: none; color: var(--red-hot); font-size: 1.5rem; cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+    import { getDatabase, ref, get, set, push } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+    // Your web app's Firebase configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyADtV06zQSN1mgfHPGyMd9XMrcnaBDbIl8",
+        authDomain: "bazar-coltrolpanel.firebaseapp.com",
+        projectId: "bazar-coltrolpanel",
+        storageBucket: "bazar-coltrolpanel.firebasestorage.app",
+        messagingSenderId: "434325187483",
+        appId: "1:434325187483:web:2bbdf219d027545798cf3e",
+        measurementId: "G-JRFJTKQ2XK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const db = getDatabase(app); 
+    
+    // --- Firebase ফাংশনগুলো ---
+    
+    window.fetchData = async (path) => {
+        // Firebase Realtime Database থেকে ডেটা আনা
+        const dataRef = ref(db, path);
+        const snapshot = await get(dataRef);
+        if (snapshot.exists()) {
+            return snapshot.val();
+        } else {
+            console.log(`No data available at ${path}`);
+            return {};
+        }
+    };
+
+    window.saveUser = async (userData, password) => {
+          // user/ইমেইল এর ভেতরে ডেটা সেভ করার লজিক
+          const emailKey = userData.email.replace(/\./g, ','); // ইমেইলের ডট কমা দিয়ে রিপ্লেস করা
+          const userRef = ref(db, `user/${emailKey}`);
+          // পাসওয়ার্ড সাধারণত হ্যাশ করে সেভ করা উচিত, এখানে সরলভাবে সেভ করা হলো
+          return set(userRef, {...userData, password: password }); 
+    };
+    
+    window.loginUser = async (email, password) => {
+        // user/ইমেইল এর ভেতরে পাসওয়ার্ড চেক করে লগইন করার লজিক
+        const emailKey = email.replace(/\./g, ',');
+        const userRef = ref(db, `user/${emailKey}`);
+        const snapshot = await get(userRef);
+        
+        if (snapshot.exists()) {
+            const userData = snapshot.val();
+            if (userData.password === password) { // পাসওয়ার্ড চেক
+                return { success: true, user: userData };
+            }
+        }
+        return { success: false, user: null };
+    };
+
+    window.saveOrder = async (orderData) => {
+          // order ফোল্ডারে rendomid তৈরি করে ডেটা সেভ করার লজিক
+          const orderRef = ref(db, 'order');
+          return push(orderRef, orderData); // push() স্বয়ংক্রিয়ভাবে একটি র্যান্ডম আইডি তৈরি করে
+    };
+  </script>
+
+  <header class="shopnow-header-container">
+      <div class="header-bar">
+          
+
+          <div class="logo-tex">
+            <img class="logo" src="logo.png"> </img>
+          </div>
+
+          <div class="icon-group-top">
+              <div id="loginBtn" class="search-icon-top">
+                  <span class="material-symbols-outlined">
+                      person
+                  </span>
+                  <span id="loginBtnText" class="user-name-text">লগইন</span>
+              </div>
+
+              <div class="cart-icon-container" id="cartBtn">
+                  <div class="cart-icon">
+                      <span class="material-symbols-outlined">
+                          shopping_cart
+                      </span>
+                  </div>
+                  <span id="cartCount" class="cart-badge">0</span>
+              </div>
+          </div>
+      </div>
+
+      <div class="search-bar-section">
+          <input type="text" class="search-input-new" placeholder="অনুসন্ধান করুন.....">
+          <button class="search-button">খুঁজুন</button>
+      </div>
+  </header>
+  
+  
+  <section class="cats">
+    <div class="row" id="categoryRow">
+      </div>
+  </section>
+  
+  <section class="hero">
+    <div class="slider" id="slider">
+      <div class="slides" id="slides">
+        <div class="slide">
+          <div class="copy">
+            <span class="tag">ফ্রেশ ডেইলি</span>
+            <h2>সপ্তাহজুড়ে তাজা সবজি & ফল</h2>
+            <p>স্থানীয় ফার্ম থেকে সরাসরি ডেলিভারি — কাঁচামাল, ভালো দামে।</p>
+            <button class="btn" onclick="scrollToProducts()">শপ করুন</button>
+          </div>
+          <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1200&q=60&auto=format&fit=crop" alt="banner1">
+        </div>
+        <div class="slide">
+          <div class="copy">
+            <span class="tag">ডেইলি ডিলস</span>
+            <h2>আজকের বিশেষ ছাড়</h2>
+            <p>নিত্যপ্রয়োজনীয় পণ্যে বিশেষ ছাড় — মজুদ সীমিত।</p>
+            <button class="btn" onclick="scrollToProducts()">ডিল দেখুন</button>
+          </div>
+          <img src="https://images.unsplash.com/photo-1498654208925-3a3f6c8f6a91?w=1200&q=60&auto=format&fit=crop" alt="banner2">
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctrl" onclick="prevSlide()">◀</div>
+        <div class="ctrl" onclick="nextSlide()">▶</div>
+      </div>
+    </div>
+  </section>
+  
+  <main class="container" id="productsContainer">
+    </main>
+  
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <h4>FreshMart</h4>
+        <p class="muted">আপনার আশেপাশের তাজা বাজার — দ্রুত ডেলিভারি, সহজ রিটার্ন, সেরা কাস্টমার সার্ভিস।</p>
+        <div class="socials">
+          <a aria-label="facebook" href="#" style="color:#3b5998">🔵</a>
+          <a aria-label="instagram" href="#" style="color:#c32aa3">📸</a>
+          <a aria-label="tw" href="#" style="color:#00acee">🐦</a>
+        </div>
+      </div>
+      <div>
+        <h4>ক্যাটাগরিস</h4>
+        <p class="muted">সবজি<br>ফল<br>দুধ & ডেইরি<br>স্ট্যাপলস</p>
+      </div>
+      <div>
+        <h4>সাপোর্ট</h4>
+        <p class="muted">হেল্প সেন্টার<br>শিপিং & রিটার্ন<br>কনট্যাক্ট</p>
+      </div>
+      <div>
+        <h4>নিউজলেটার</h4>
+        <p class="muted">বিশেষ ডিসকাউন্ট পেতে সাবস্ক্রাইব করুন।</p>
+        <div style="margin-top:8px;display:flex;gap:8px">
+          <input placeholder="ইমেইল লিখুন" style="padding:8px;border-radius:8px;border:none;flex:1">
+          <button class="btn">সাবস্ক্রাইব</button>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;color:#94a3b8;margin-top:18px">© 2025 FreshMart • সকল অধিকার সংরক্ষিত</p>
+  </footer>
+  
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn">&times;</span>
+        <h2 id="modalTitle">লগইন</h2>
+        <form id="loginForm" class="login-form active">
+            <div class="form-group"><input type="email" id="loginEmail" placeholder="ইমেইল" required></div>
+            <div class="form-group"><input type="password" id="loginPassword" placeholder="পাসওয়ার্ড" required></div>
+            <button type="submit" class="btn">লগইন করুন</button>
+            <p class="switch-link">একাউন্ট নেই? <span id="switchToRegister">রেজিস্টার করুন</span></p>
+        </form>
+
+        <form id="registerForm" class="login-form">
+            <div class="form-group"><input type="text" id="regName" placeholder="নাম" required></div>
+            <div class="form-group"><input type="email" id="regEmail" placeholder="ইমেইল" required></div>
+            <div class="form-group"><input type="tel" id="regNumber" placeholder="ফোন নাম্বার" required></div>
+            <div class="form-group"><input type="text" id="regAddress" placeholder="ঠিকানা" required></div>
+            <div class="form-group"><input type="password" id="regPassword" placeholder="পাসওয়ার্ড" required></div>
+            <button type="submit" class="btn">রেজিস্টার</button>
+            <p class="switch-link">একাউন্ট আছে? <span id="switchToLogin">লগইন করুন</span></p>
+        </form>
+    </div>
+  </div>
+  
+  <div id="variantSheet" class="bottom-sheet">
+    <div class="sheet-content">
+        <button class="close-modal-btn" id="closeSheetBtn">&times;</button>
+        <div class="sheet-details">
+            <img id="sheetProductImage" src="https://via.placeholder.com/80" alt="Product" class="sheet-prod-img">
+            <div class="details-text">
+                <h3 id="sheetProductName" style="margin:0;">আলু</h3>
+                <p id="sheetProductPricePerUnit" class="muted" style="margin:4px 0 0;">RM ২০/কেজি</p>
+            </div>
+        </div>
+        
+        <h4 class="sheet-sub-title">ভেরিয়েন্ট নির্বাচন করুন:</h4>
+        <div id="variantChoices" class="variant-choices">
+            </div>
+        
+        <div class="sheet-action-bar">
+            <div class="price-display">
+                মোট দাম: RN <span id="totalPriceDisplay">0.00</span>
+            </div>
+            <button id="addToCartConfirmBtn" class="btn">কিনুন</button>
+        </div>
+    </div>
+  </div>
+  
+  <aside id="cartSidebar" class="cart-sidebar">
+    <div class="sidebar-header">
+        <h3>আমার ব্যাগ (<span id="sidebarCartCount">0</span>)</h3>
+        <button class="close-sidebar-btn">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItemsList">
+        <p class="empty-cart-msg">আপনার ব্যাগ খালি।</p>
+    </div>
+    <div class="sidebar-footer">
+        <div class="checkout-total">
+            <p>মোট মূল্য:</p>
+            <p>RM <span id="checkoutTotalAmount">0.00</span></p>
+        </div>
+        <button class="checkout-btn online-payment-btn"><i class="fas fa-credit-card"></i> অনলাইন পেমেন্ট করুন</button>
+        <button id="cashOnDeliveryBtn" class="checkout-btn cod-btn pulse-animation"><i class="fas fa-truck"></i> ক্যাশ অন ডেলিভারি</button>
+    </div>
+  </aside>
+
+  <div id="codModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal-btn">&times;</span>
+        <h2>ডেলিভারি তথ্য</h2>
+        <form id="codForm" class="cod-form">
+            <div class="form-group"><input type="text" id="codName" placeholder="আপনার নাম" required></div>
+            <div class="form-group"><input type="tel" id="codNumber" placeholder="ফোন নাম্বার" required></div>
+            <div class="form-group"><input type="text" id="codAddress" placeholder="ডেলিভারির ঠিকানা" required></div>
+            
+            <div class="order-summary">
+                <h4>অর্ডার সামারি:</h4>
+                <p>মোট প্রডাক্ট: <span id="codTotalItems">0</span> টি</p>
+                <p style="font-size:1.1rem; font-weight:bold;">সর্বমোট বিল: RM <span id="codTotalBill">0.00</span></p>
+            </div>
+
+            <button type="submit" class="btn confirm-btn">অর্ডার কনফার্ম করুন</button>
+        </form>
+    </div>
+  </div>
+
+  <script>
+    // জাভাস্ক্রিপ্ট লজিক শুরু
+    document.addEventListener('DOMContentLoaded', () => {
+        // DOM এলিমেন্ট নির্বাচন (আপনার কোড থেকে নেওয়া)
+        const loginModal = document.getElementById('loginModal');
+        const loginBtn = document.getElementById('loginBtn');
+        const closeModals = document.querySelectorAll('.close-modal-btn');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const switchToRegister = document.getElementById('switchToRegister');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const modalTitle = document.getElementById('modalTitle');
+        
+        const variantSheet = document.getElementById('variantSheet');
+        const closeSheetBtn = document.getElementById('closeSheetBtn');
+        const productsContainer = document.getElementById('productsContainer');
+        const variantChoices = document.getElementById('variantChoices');
+        const totalPriceDisplay = document.getElementById('totalPriceDisplay');
+        const addToCartConfirmBtn = document.getElementById('addToCartConfirmBtn');
+
+        const cartSidebar = document.getElementById('cartSidebar');
+        const cartBtn = document.getElementById('cartBtn');
+        const closeSidebarBtn = document.querySelector('.close-sidebar-btn');
+        const cartCount = document.getElementById('cartCount');
+        const sidebarCartCount = document.getElementById('sidebarCartCount');
+        const cartItemsList = document.getElementById('cartItemsList');
+        const checkoutTotalAmount = document.getElementById('checkoutTotalAmount');
+
+        const cashOnDeliveryBtn = document.getElementById('cashOnDeliveryBtn');
+        const codModal = document.getElementById('codModal');
+        const codForm = document.getElementById('codForm');
+        const codTotalBill = document.getElementById('codTotalBill');
+        const codTotalItems = document.getElementById('codTotalItems');
+
+        let currentProduct = null;
+        let selectedVariant = null;
+        let cart = []; 
+        let loggedInUser = null; 
+
+        // --- ক্যাটাগরি এবং প্রোডাক্ট লোড করা ---
+        async function loadData() {
+            try {
+                // Firebase থেকে ক্যাটাগরি ডেটা fetchCategories() ফাংশন দিয়ে আনবে
+                const categoryData = await window.fetchData('catagory');
+                const productData = await window.fetchData('product');
+                
+                renderCategories(categoryData);
+                renderProducts(productData);
+
+            } catch (error) {
+                console.error("Firebase ডেটা লোড করতে ব্যর্থ:", error);
+                // ফেইক ডেটা বা প্লেসহোল্ডার ডেটা দিয়ে UI রেন্ডার করা যেতে পারে
+            }
+        }
+        
+        function renderCategories(categoryData) {
+            const categoryRow = document.getElementById('categoryRow');
+            categoryRow.innerHTML = '';
+            
+            if (categoryData) {
+                Object.keys(categoryData).forEach(key => {
+                    const cat = categoryData[key];
+                    const el = document.createElement('div'); el.className='cat';
+                    // ক্যাটাগরি ID দিয়ে প্রোডাক্ট ব্লকে স্ক্রল করার জন্য ডেটা সেট করা
+                    el.dataset.catId = cat.name.replace(/\s+/g, '-'); 
+                    el.innerHTML = `<img src="${cat.image}" alt="${cat.name}"><p>${cat.name}</p>`;
+                    categoryRow.appendChild(el);
+                });
+            }
+        }
+
+        function renderProducts(productsObj) {
+            productsContainer.innerHTML = ''; 
+            const groupedProducts = {};
+
+            // ক্যাটাগরি অনুযায়ী গ্রুপিং
+            if (productsObj) {
+                Object.keys(productsObj).forEach(key => {
+                    const prod = productsObj[key];
+                    const catName = prod['catagory name'];
+                    if (!groupedProducts[catName]) {
+                        groupedProducts[catName] = [];
+                    }
+                    groupedProducts[catName].push({ id: key, ...prod });
+                });
+            }
+            
+            // রেন্ডার করা
+            Object.keys(groupedProducts).forEach(catName => {
+                const catId = catName.replace(/\s+/g, '-');
+                const block = document.createElement('section'); block.className='category-block'; block.id = catId + '-block';
+                block.innerHTML = `<h3>${catName}</h3><div class="products"></div>`;
+                const grid = block.querySelector('.products');
+
+                groupedProducts[catName].forEach(prod => {
+                    const card = document.createElement('div'); card.className='card';
+                    // Add to Cart বাটনে প্রয়োজনীয় ডেটা সেট করা
+                    card.innerHTML = `
+                      <img src="${prod['product image']}" alt="${prod['products name']}">
+                      <div class="name">${prod['products name']}</div>
+                      <div class="price">RM ${prod['product price']} <span class="price-per">/প্রতি কেজি</span></div>
+                      <div style="margin-top:auto;">
+                        <button class="btn add-to-cart-trigger" 
+                          data-id="${prod.id}"
+                          data-name="${prod['products name']}" 
+                          data-image="${prod['product image']}" 
+                          data-price="${prod['product price']}"
+                          data-variants="${prod['product variant']}"
+                          >ব্যাগে যোগ করুন</button>
+                      </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                productsContainer.appendChild(block);
+            });
+        }
+        
+        // --- ইউটিলিটি ফাংশন ---
+        
+        // ক্যাটাগরিতে ক্লিক করে স্ক্রল করা
+        document.getElementById('categoryRow').addEventListener('click', (e) => {
+            const catEl = e.target.closest('.cat');
+            if (catEl && catEl.dataset.catId) {
+                document.getElementById(catEl.dataset.catId + '-block').scrollIntoView({behavior:'smooth',block:'start'});
+            }
+        });
+
+        // মূল্য ক্যালকুলেশনের ফাংশন
+        function calculatePrice(pricePerUnit, variant) {
+            const variantText = variant.toLowerCase().trim();
+            let quantityInKg = 0;
+            
+            if (variantText.endsWith('kg')) {
+                quantityInKg = parseFloat(variantText.replace('kg', ''));
+            } else if (variantText.endsWith('g')) {
+                quantityInKg = parseFloat(variantText.replace('g', '')) / 1000;
+            } else if (variantText.endsWith('litre')) {
+                 quantityInKg = parseFloat(variantText.replace('litre', '')); // লিটারকে kg এর সমতুল্য ধরা
+            }
+            // "প্রতি পিস/আটি" ইত্যাদির ক্ষেত্রে যদি সরাসরি দাম হয়, তবে ১ ধরা
+            else {
+                quantityInKg = 1; 
+            }
+            
+            return pricePerUnit * quantityInKg;
+        }
+
+        // কার্ট আপডেট করার ফাংশন
+        function updateCart() {
+            const totalItems = cart.length;
+            const totalAmount = cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+            cartCount.textContent = totalItems;
+            sidebarCartCount.textContent = totalItems;
+            checkoutTotalAmount.textContent = totalAmount.toFixed(2);
+            codTotalBill.textContent = totalAmount.toFixed(2);
+            codTotalItems.textContent = totalItems;
+
+            cartItemsList.innerHTML = ''; 
+            if (cart.length === 0) {
+                cartItemsList.innerHTML = '<p class="empty-cart-msg">আপনার ব্যাগ খালি।</p>';
+            } else {
+                // কার্ট আইটেম রেন্ডার
+                cart.forEach((item, index) => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.className = 'cart-item';
+                    itemDiv.innerHTML = `
+                        <div class="cart-item-details">
+                            <img src="${item.image}" alt="${item.name}" style="width:40px; height:40px; object-fit:cover; border-radius:5px;">
+                            <div>
+                                <p style="font-weight:600; font-size:14px;">${item.name}</p>
+                                <p class="muted" style="font-size:12px;">${item.variant}</p>
+                            </div>
+                        </div>
+                        <div style="text-align:right;">
+                            <p style="color:var(--accent-2); font-weight:700;">RM ${item.totalPrice.toFixed(2)}</p>
+                            <button class="remove-cart-item-btn" data-index="${index}">&times;</button>
+                        </div>
+                    `;
+                    cartItemsList.appendChild(itemDiv);
+                });
+            }
+            
+            // রিমুভ বাটন লিসেনার
+            document.querySelectorAll('.remove-cart-item-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const indexToRemove = parseInt(e.currentTarget.dataset.index);
+                    cart.splice(indexToRemove, 1);
+                    updateCart();
+                });
+            });
+        }
+        
+        // --- লগইন/রেজিস্টার মডাল লজিক ---
+        loginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'block';
+        });
+
+        closeModals.forEach(btn => {
+            btn.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+                codModal.style.display = 'none';
+            });
+        });
+
+        window.onclick = (event) => {
+            if (event.target == loginModal) {loginModal.style.display = 'none';}
+            if (event.target == codModal) {codModal.style.display = 'none';}
+        };
+
+        switchToRegister.addEventListener('click', () => {
+            loginForm.classList.remove('active');
+            registerForm.classList.add('active');
+            modalTitle.textContent = 'একাউন্ট তৈরী করুন';
+        });
+
+        switchToLogin.addEventListener('click', () => {
+            registerForm.classList.remove('active');
+            loginForm.classList.add('active');
+            modalTitle.textContent = 'লগইন';
+        });
+
+        // রেজিস্ট্রেশন লজিক
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('regEmail').value;
+            const name = document.getElementById('regName').value;
+            const number = document.getElementById('regNumber').value;
+            const address = document.getElementById('regAddress').value;
+            const password = document.getElementById('regPassword').value;
+
+            try {
+                await window.saveUser({ email, name, number, address, password }, password); // password field সেভ হচ্ছে
+                alert('রেজিস্ট্রেশন সফল! আপনি এখন লগইন করতে পারেন।');
+                switchToLogin.click();
+            } catch (error) {
+                alert('রেজিস্ট্রেশন ব্যর্থ: ' + error.message);
+            }
+        });
+
+        // লগইন লজিক
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                const result = await window.loginUser(email, password);
+                if (result.success) {
+                    loggedInUser = result.user;
+                    loginModal.style.display = 'none';
+                    // হেডার পরিবর্তনের কারণে এই লাইনটি নতুন কোড দিয়ে প্রতিস্থাপন করা হয়েছে
+                    const loginBtnText = document.getElementById('loginBtnText');
+                    if (loginBtnText) {
+                        loginBtnText.textContent = loggedInUser.name.split(' ')[0] || 'একাউন্ট';
+                    }
+
+                    alert('লগইন সফল!');
+                } else {
+                     alert('ইমেইল বা পাসওয়ার্ড ভুল।');
+                }
+            } catch (error) {
+                alert('লগইন ব্যর্থ: ' + error.message);
+            }
+        });
+
+        // --- ভেরিয়েন্ট বটম শীট লজিক ---
+        
+        productsContainer.addEventListener('click', (e) => {
+            const btn = e.target.closest('.add-to-cart-trigger');
+            if (btn) {
+                const variants = btn.dataset.variants.split(',');
+                const price = parseFloat(btn.dataset.price);
+                const name = btn.dataset.name;
+                const image = btn.dataset.image;
+                const productId = btn.dataset.id;
+                
+                currentProduct = { id: productId, name, image, price, variants };
+                selectedVariant = null;
+                
+                document.getElementById('sheetProductImage').src = image;
+                document.getElementById('sheetProductName').textContent = name;
+                document.getElementById('sheetProductPricePerUnit').textContent = `RM ${price.toFixed(2)}/প্রতি কেজি`;
+
+                variantChoices.innerHTML = '';
+                variants.forEach(variant => {
+                    const cleanVariant = variant.trim();
+                    const btn = document.createElement('button');
+                    btn.className = 'variant-btn';
+                    btn.textContent = cleanVariant;
+                    btn.dataset.variant = cleanVariant;
+                    variantChoices.appendChild(btn);
+                });
+
+                totalPriceDisplay.textContent = '0.00';
+                variantSheet.classList.add('active');
+            }
+        });
+        
+        closeSheetBtn.addEventListener('click', () => {
+            variantSheet.classList.remove('active');
+        });
+
+        variantChoices.addEventListener('click', (e) => {
+            const btn = e.target.closest('.variant-btn');
+            if (btn) {
+                document.querySelectorAll('.variant-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedVariant = btn.dataset.variant;
+                
+                const totalPrice = calculatePrice(currentProduct.price, selectedVariant);
+                totalPriceDisplay.textContent = totalPrice.toFixed(2);
+            }
+        });
+
+        // কিনুন (Add to Cart) লজিক
+        addToCartConfirmBtn.addEventListener('click', (e) => {
+            if (!selectedVariant) {
+                alert('দয়া করে একটি ভেরিয়েন্ট নির্বাচন করুন।');
+                return;
+            }
+
+            const totalPrice = parseFloat(totalPriceDisplay.textContent);
+            const newItem = {
+                id: currentProduct.id,
+                name: currentProduct.name,
+                image: currentProduct.image,
+                pricePerUnit: currentProduct.price,
+                variant: selectedVariant,
+                totalPrice: totalPrice
+            };
+
+            cart.push(newItem);
+            updateCart();
+            variantSheet.classList.remove('active');
+
+            // --- Fly to Cart Animation ---
+            const cartRect = document.querySelector('#cartBtn').getBoundingClientRect(); // নতুন হেডারের ID ব্যবহার
+            const sheetRect = variantSheet.getBoundingClientRect();
+            
+            const flyingImg = document.createElement('img');
+            flyingImg.src = currentProduct.image;
+            flyingImg.className = 'flying-product';
+            
+            // স্টার্টিং পজিশন: বটম শীটের প্রোডাক্ট ইমেজ থেকে
+            flyingImg.style.left = `${sheetRect.left + 28}px`; 
+            flyingImg.style.top = `${sheetRect.top + 30}px`; 
+            
+            // ডেস্টিনেশন পজিশন: কার্ট আইকনে (CSS variable দিয়ে সেট করা)
+            document.documentElement.style.setProperty('--dx', `${cartRect.left - (sheetRect.left + 28)}px`);
+            document.documentElement.style.setProperty('--dy', `${cartRect.top - (sheetRect.top + 30)}px`);
+
+            document.body.appendChild(flyingImg);
+            
+            setTimeout(() => {
+                flyingImg.remove();
+                if(cart.length === 1) {
+                    cartSidebar.classList.add('open'); // প্রথম প্রোডাক্ট যোগ করলে সাইডবার অটো ওপেন
+                }
+            }, 800);
+        });
+
+        // --- কুইক চেকআউট সাইডবার লজিক ---
+        
+        cartBtn.addEventListener('click', () => {
+            cartSidebar.classList.toggle('open');
+        });
+
+        closeSidebarBtn.addEventListener('click', () => {
+            cartSidebar.classList.remove('open');
+        });
+
+        // ক্যাশ অন ডেলিভারি বাটন ক্লিক
+        cashOnDeliveryBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('আপনার ব্যাগে কোনো প্রডাক্ট নেই।');
+                return;
+            }
+            
+            // লগইন করা থাকলে তথ্য প্রি-ফিল করা
+            if (loggedInUser) {
+                document.getElementById('codName').value = loggedInUser.name || '';
+                document.getElementById('codNumber').value = loggedInUser.number || '';
+                document.getElementById('codAddress').value = loggedInUser.address || '';
+            } else {
+                // লগইন না থাকলে, ফর্ম খালি করা
+                document.getElementById('codName').value = '';
+                document.getElementById('codNumber').value = '';
+                document.getElementById('codAddress').value = '';
+            }
+            
+            codModal.style.display = 'block';
+        });
+
+        // অর্ডার কনফার্ম করুন (COD) লজিক
+        codForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('codName').value;
+            const number = document.getElementById('codNumber').value;
+            const address = document.getElementById('codAddress').value;
+
+            // item স্ট্রিং তৈরি করা: "আলু-1kg-RM 2-pending,টমেটো-500g-RM 1-pending"
+const itemString = cart.map(item => 
+    `${item.name}-${item.variant}-RM ${item.totalPrice.toFixed(2)}-pending`
+).join(',');
+
+            const orderData = {
+                name: name,
+                number: number,
+                address: address,
+                item: itemString,
+                status: 'pending'
+            };
+
+            try {
+                await window.saveOrder(orderData); // Firebase-এ সেভ করা
+                alert('অর্ডার সফলভাবে কনফার্ম হয়েছে! খুব শীঘ্রই আপনার সাথে যোগাযোগ করা হবে।');
+                
+                // রিসেট করা
+                codModal.style.display = 'none';
+                cart = []; 
+                updateCart();
+                cartSidebar.classList.remove('open');
+            } catch (error) {
+                alert('অর্ডার কনফার্ম করতে সমস্যা হয়েছে: ' + error.message);
+            }
+        });
+        
+        // --- ইনিশিয়ালাইজেশন ---
+        loadData();
+        updateCart(); // কার্ট ইনিশিয়ালাইজ করা
+        
+        // স্লাইডার লজিক (আপনার দেওয়া কোড)
+        let slideIndex=0; const slidesEl = document.getElementById('slides');
+        window.showSlide = (i) => {
+          const total = slidesEl.children.length; slideIndex = (i + total) % total;
+          slidesEl.style.transform = `translateX(-${slideIndex*100}%)`;
+        }
+        window.nextSlide = () => { showSlide(slideIndex+1); }
+        window.prevSlide = () => { showSlide(slideIndex-1); }
+        setInterval(window.nextSlide,5000);
+        window.scrollToProducts = () => { document.getElementById('productsContainer').scrollIntoView({behavior:'smooth'}) }
+    });
+  </script>
+</body>
+</html>t
