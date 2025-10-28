@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet" />
 
-
+   
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -106,9 +106,9 @@
         </div>
 
         <div class="search-bar-section">
-            <input type="text" class="search-input-new" placeholder="অনুসন্ধান করুন.....">
-            <button class="search-button">খুঁজুন</button>
-        </div>
+            <input type="text" id="searchInput" class="search-input-new" placeholder="অনুসন্ধান করুন.....">
+            <button id="searchButton" class="search-button">খুঁজুন</button>
+            <div id="suggestionsBox"></div> </div>
     </header>
 
 
@@ -299,10 +299,17 @@
             const codTotalBill = document.getElementById('codTotalBill');
             const codTotalItems = document.getElementById('codTotalItems');
 
+            // --- নতুন DOM এলিমেন্ট নির্বাচন ---
+            const searchInput = document.getElementById('searchInput');
+            const searchButton = document.getElementById('searchButton');
+            const suggestionsBox = document.getElementById('suggestionsBox');
+            // ---
+
             let currentProduct = null;
             let selectedVariant = null;
             let cart = [];
             let loggedInUser = null;
+            let allProducts = []; // সমস্ত প্রোডাক্টের তালিকা
 
             // --- ক্যাটাগরি এবং প্রোডাক্ট লোড করা ---
             async function loadData() {
@@ -311,8 +318,16 @@
                     const categoryData = await window.fetchData('catagory');
                     const productData = await window.fetchData('product');
 
+                    // সমস্ত প্রোডাক্ট সংরক্ষণ করা
+                    if (productData) {
+                        allProducts = Object.keys(productData).map(key => ({
+                            id: key,
+                            ...productData[key]
+                        }));
+                    }
+                    
                     renderCategories(categoryData);
-                    renderProducts(productData);
+                    renderProducts(allProducts); // শুরুতে সমস্ত প্রোডাক্ট রেন্ডার করা
 
                 } catch (error) {
                     console.error("Firebase ডেটা লোড করতে ব্যর্থ:", error);
@@ -336,26 +351,31 @@
                 }
             }
 
-            function renderProducts(productsObj) {
+            function renderProducts(productsArr) {
                 productsContainer.innerHTML = '';
                 const groupedProducts = {};
 
                 // ক্যাটাগরি অনুযায়ী গ্রুপিং
-                if (productsObj) {
-                    Object.keys(productsObj).forEach(key => {
-                        const prod = productsObj[key];
+                if (productsArr.length > 0) {
+                    productsArr.forEach(prod => {
                         const catName = prod['catagory name'];
                         if (!groupedProducts[catName]) {
                             groupedProducts[catName] = [];
                         }
-                        groupedProducts[catName].push({ id: key, ...prod });
+                        groupedProducts[catName].push(prod);
                     });
+                } else if (searchInput.value.trim() !== "") {
+                     // সার্চ করার পরেও কিছু না পেলে মেসেজ দেখানো
+                    productsContainer.innerHTML = '<p style="text-align:center; padding:20px; font-size:1.2em;">দুঃখিত, এই নামের কোনো প্রোডাক্ট পাওয়া যায়নি।</p>';
+                    return; // কিছু না থাকলে আর রেন্ডার করার দরকার নেই
                 }
 
                 // রেন্ডার করা
                 Object.keys(groupedProducts).forEach(catName => {
                     const catId = catName.replace(/\s+/g, '-');
-                    const block = document.createElement('section'); block.className='category-block'; block.id = catId + '-block';
+                    // যখন সার্চ করা হবে তখন category-block এর id এর শেষে '-block' যোগ করা হচ্ছে, যাতে scrollIntoView কাজ করতে পারে।
+                    const blockId = searchInput.value.trim() === "" ? catId + '-block' : catId + '-search-block'; // সার্চের জন্য আলাদা id
+                    const block = document.createElement('section'); block.className='category-block'; block.id = blockId;
                     block.innerHTML = `<h3>${catName}</h3><div class="products"></div>`;
                     const grid = block.querySelector('.products');
 
@@ -382,13 +402,88 @@
                 });
             }
 
+            // --- সার্চ লজিক ---
+            function performSearch(query) {
+                const lowerCaseQuery = query.toLowerCase().trim();
+                if (lowerCaseQuery === "") {
+                    renderProducts(allProducts); // খালি হলে সব দেখাবে
+                    return;
+                }
+
+                const filteredProducts = allProducts.filter(product => 
+                    product['products name'].toLowerCase().includes(lowerCaseQuery)
+                );
+                
+                renderProducts(filteredProducts);
+            }
+
+            // সাজেশন দেখানো
+            function showSuggestions(query) {
+                suggestionsBox.innerHTML = '';
+                const lowerCaseQuery = query.toLowerCase().trim();
+
+                if (lowerCaseQuery.length < 2) {
+                    return; // ২ অক্ষরের কম হলে সাজেশন দেখানোর দরকার নেই
+                }
+
+                const matchedProducts = allProducts.filter(product => 
+                    product['products name'].toLowerCase().includes(lowerCaseQuery)
+                ).slice(0, 5); // প্রথম ৫টি সাজেশন
+
+                matchedProducts.forEach(product => {
+                    const item = document.createElement('div');
+                    item.className = 'suggestion-item';
+                    item.innerHTML = `<img src="${product['product image']}" alt="${product['products name']}"> ${product['products name']}`;
+                    
+                    item.addEventListener('click', () => {
+                        searchInput.value = product['products name'];
+                        performSearch(product['products name']);
+                        suggestionsBox.innerHTML = ''; // সাজেশন বন্ধ
+                    });
+
+                    suggestionsBox.appendChild(item);
+                });
+            }
+
+            // সার্চ ইনপুট ইভেন্ট
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.trim();
+                showSuggestions(query);
+
+            // **নতুন সংযোজন:** ইনপুট খালি হলে সব প্রোডাক্ট দেখাও
+               if (query === "") {
+               performSearch(""); // performSearch ফাংশন খালি স্ট্রিং পেলে সব প্রোডাক্ট দেখানোর জন্য ডিজাইন করা আছে
+               }
+});    
+
+            // সার্চ বাটনে ক্লিক ইভেন্ট
+            searchButton.addEventListener('click', () => {
+                performSearch(searchInput.value);
+                suggestionsBox.innerHTML = ''; // সাজেশন বন্ধ
+            });
+
+            // যখন ইনপুট এর বাইরে ক্লিক করা হবে, তখন সাজেশন বক্স বন্ধ করা
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-bar-section')) {
+                    suggestionsBox.innerHTML = '';
+                }
+            });
+
             // --- ইউটিলিটি ফাংশন ---
 
             // ক্যাটাগরিতে ক্লিক করে স্ক্রল করা
             document.getElementById('categoryRow').addEventListener('click', (e) => {
                 const catEl = e.target.closest('.cat');
                 if (catEl && catEl.dataset.catId) {
-                    document.getElementById(catEl.dataset.catId + '-block').scrollIntoView({behavior:'smooth',block:'start'});
+                    // স্ক্রল করার জন্য সব প্রোডাক্ট রেন্ডার করতে হবে
+                    searchInput.value = "";
+                    renderProducts(allProducts);
+                    setTimeout(() => { // নিশ্চিত করার জন্য setTimeout
+                        const targetBlock = document.getElementById(catEl.dataset.catId + '-block');
+                        if (targetBlock) {
+                            targetBlock.scrollIntoView({behavior:'smooth',block:'start'});
+                        }
+                    }, 50);
                 }
             });
 
